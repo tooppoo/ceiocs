@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "rootDir": "./packages",
+    "strict": true,
+    "baseUrl": "./packages",
+    "paths": {
+      "@branch/*": ["branch/src/*"]
+    },
+    "declaration": true,
+    "esModuleInterop": true,
+    "newLine": "lf"
+  },
+  "exclude": ["node_modules"]
+}
