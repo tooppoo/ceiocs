@@ -1,65 +1,46 @@
 import {
+  SyncEachCondition,
+  AsyncIfThen,
+  Action,
+  AsyncBranch,
   SyncBranchFactory,
   AsyncBranchFactory,
   Branch,
-  SyncEachCondition,
-  SyncElseifThen,
-  SyncBranch,
-  SyncAction,
   EachCondition,
-  AsyncElseifThen,
-  Action,
-  AsyncBranch
+  SyncAction,
+  SyncBranch,
+  SyncIfThen
 } from "../type";
+
+interface Builder {
+  (factory: SyncBranchFactory): {
+    if(c: SyncEachCondition): SyncIfThen;
+    if<T>(c: SyncEachCondition, a: SyncAction<T>): SyncBranch<T>;
+  };
+  (factory: AsyncBranchFactory): {
+    if(c: EachCondition): AsyncIfThen;
+    if<T>(c: EachCondition, a: Action<T>): AsyncBranch<T>;
+  };
+}
+
+const build: Builder = (factory: any) => ({
+  if(condition: any, action?: any): any {
+    if (action) {
+      return factory.create(condition, action);
+    } else {
+      return {
+        then: (lazyAction: any): any => factory.create(condition, lazyAction)
+      };
+    }
+  }
+});
 
 export const buildCondition = (
   syncCond: SyncBranchFactory,
   asyncCond: AsyncBranchFactory
-): Branch => {
-  function syncIf<T>(condition: SyncEachCondition): SyncElseifThen<T>;
-  function syncIf<T>(
-    condition: SyncEachCondition,
-    action: SyncAction<T>
-  ): SyncBranch<T>;
-  function syncIf<T>(
-    condition: SyncEachCondition,
-    action?: SyncAction<T>
-  ): SyncBranch<T> | SyncElseifThen<T> {
-    if (action) {
-      return syncCond.create(condition, action);
-    } else {
-      return {
-        then(lazyAction: SyncAction<T>): SyncBranch<T> {
-          return syncCond.create(condition, lazyAction);
-        }
-      };
-    }
+): Branch => ({
+  ...build(syncCond),
+  async: {
+    ...build(asyncCond)
   }
-
-  function asyncIf<T>(condition: EachCondition): AsyncElseifThen<T>;
-  function asyncIf<T>(
-    condition: EachCondition,
-    action: Action<T>
-  ): AsyncBranch<T>;
-  function asyncIf<T>(
-    condition: EachCondition,
-    action?: Action<T>
-  ): AsyncBranch<T> | AsyncElseifThen<T> {
-    if (action) {
-      return asyncCond.create(condition, action);
-    } else {
-      return {
-        then(lazyAction: Action<T>): AsyncBranch<T> {
-          return asyncCond.create(condition, lazyAction);
-        }
-      };
-    }
-  }
-
-  return {
-    if: syncIf,
-    async: {
-      if: asyncIf
-    }
-  };
-};
+});

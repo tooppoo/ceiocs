@@ -35,6 +35,10 @@ export interface SyncBranchFactory {
 export interface AsyncBranchFactory {
   create<T>(condition: EachCondition, action: Action<T>): AsyncBranch<T>;
 }
+export interface BranchFactory {
+  create<T>(condition: SyncEachCondition, action: SyncAction<T>): SyncBranch<T>;
+  create<T>(condition: EachCondition, action: Action<T>): AsyncBranch<T>;
+}
 
 export interface SyncBranch<T> {
   elseif(condition: SyncEachCondition): SyncElseifThen<T>;
