@@ -1,5 +1,6 @@
 # ceiocs
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![npm version](https://badge.fury.io/js/ceiocs.svg)](https://badge.fury.io/js/ceiocs)
 
 ## About
 `ceiocs` is library that allows developers to use conditional 'expressions' instead of conditional 'statements'.
@@ -24,10 +25,8 @@ branch
 ```
 
 when you want to delay evaluation, you can use function. it is allowed to use both of function and other at same time.
-
 when you use function, each function is not evaluated until it is required.
-
-on following code, `() => "c"` is not evaluated.
+on following code, `() => 3` is not evaluated.
 ```typescript
 import { branch } from "ceiocs";
 
