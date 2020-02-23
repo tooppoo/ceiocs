@@ -1,6 +1,7 @@
 # ceiocs
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![npm version](https://badge.fury.io/js/ceiocs.svg)](https://badge.fury.io/js/ceiocs)
+[![Build Status](https://travis-ci.org/tooppoo/ceiocs.svg?branch=master)](https://travis-ci.org/tooppoo/ceiocs)
 
 ## About
 `ceiocs` is library that allows developers to use conditional 'expressions' instead of conditional 'statements'.
