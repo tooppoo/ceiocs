@@ -19,22 +19,45 @@ export interface AsyncBranchConstructor<T> {
   new (tuples: AsyncTupleList<T>): AsyncBranch<T>;
 }
 
+interface SwitchMaybeElseIf {
+  <C, A, B>(update: Updater<C, A, B>): MaybeElseIf<C, A, B>;
+}
+type Updater<C, A, B> = (c: C, a: A) => B;
+interface MaybeElseIf<C, A, B> {
+  (c: C): { then(a: A): B };
+  (c: C, a: A): B;
+  (c: C, a?: A): B | { then(a: A): B };
+}
+
+const maybeElseIf: SwitchMaybeElseIf = <C, A, B>(update: Updater<C, A, B>) => (
+  c: C,
+  a?: A
+): any => {
+  if (!a) {
+    return {
+      then: (action: A): B => update(c, action)
+    };
+  }
+
+  return update(c, a);
+};
+
 export abstract class BaseSyncBranch<T> implements SyncBranch<T> {
   protected constructor(protected readonly tuples: ReadonlySyncTupleList<T>) {}
+
+  private readonly maybeElseIf = maybeElseIf<
+    SyncEachCondition,
+    SyncAction<T>,
+    SyncBranch<T>
+  >((c, a) => this.update(c, a));
 
   elseif(c: SyncEachCondition): SyncElseifThen<T>;
   elseif(c: SyncEachCondition, a: SyncAction<T>): SyncBranch<T>;
   elseif(
-    c: SyncEachCondition,
-    a?: SyncAction<T>
+    condition: SyncEachCondition,
+    action?: SyncAction<T>
   ): SyncElseifThen<T> | SyncBranch<T> {
-    if (!a) {
-      return {
-        then: (action: SyncAction<T>): SyncBranch<T> => this.update(c, action)
-      };
-    }
-
-    return this.update(c, a);
+    return this.maybeElseIf(condition, action);
   }
 
   else(otherAction: SyncAction<T>): T {
@@ -57,16 +80,16 @@ export abstract class BaseSyncBranch<T> implements SyncBranch<T> {
 export abstract class BaseAsyncBranch<T> implements AsyncBranch<T> {
   constructor(protected readonly tuples: ReadonlyAsyncTupleList<T>) {}
 
+  private readonly maybeElseIf = maybeElseIf<
+    EachCondition,
+    Action<T>,
+    AsyncBranch<T>
+  >((c, a) => this.update(c, a));
+
   elseif(c: EachCondition): AsyncElseifThen<T>;
   elseif(c: EachCondition, a: Action<T>): AsyncBranch<T>;
   elseif(c: EachCondition, a?: Action<T>): AsyncBranch<T> | AsyncElseifThen<T> {
-    if (!a) {
-      return {
-        then: (a: Action<T>): AsyncBranch<T> => this.update(c, a)
-      };
-    }
-
-    return this.update(c, a);
+    return this.maybeElseIf(c, a);
   }
 
   async else(otherAction: Action<T>): Promise<T> {
