@@ -1,2 +1,1 @@
-export { Branch } from "./branch/index";
-export { immutable as branch } from "./branch/index";
+export { branch } from "./branch/src/index";

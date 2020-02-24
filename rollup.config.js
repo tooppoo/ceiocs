@@ -30,7 +30,7 @@ const configsForEachPackage = packages.reduce(
   (prev, pkg) => [
     ...prev,
     ...formats.map(fmt => ({
-      input: path.resolve(__dirname, "packages", pkg, "index.ts"),
+      input: path.resolve(__dirname, "packages", pkg, "src", "index.ts"),
       output: {
         name: `conditions-${pkg}-${fmt}`,
         file: `./dist/${pkg}.${fmt}.js`,

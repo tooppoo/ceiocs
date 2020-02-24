@@ -1,6 +1,6 @@
-import { resolve } from "@branch/lib/functions";
+import { resolveMaybeCallable } from "@branch/core/resolve-maybe-callable";
 
-describe(resolve, () => {
+describe(resolveMaybeCallable, () => {
   describe.each([
     ["a"],
     [(): string => "a"],
@@ -11,7 +11,7 @@ describe(resolve, () => {
     ]
   ])("%p", funcOrVal => {
     it("should resolved", () => {
-      expect(resolve(funcOrVal)).toStrictEqual("a");
+      expect(resolveMaybeCallable(funcOrVal)).toStrictEqual("a");
     });
   });
 });
