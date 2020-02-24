@@ -28,6 +28,7 @@ branch
 ```
 
 when you want to delay evaluation, you can use function. it is allowed to use both of function and other at same time.
+
 when you use function, each function is not evaluated until it is required.
 on following code, `() => 3` is not evaluated.
 ```typescript
@@ -36,7 +37,7 @@ import { branch } from "ceiocs";
 branch
   .if(() => false, 1)
   .elseif(true, () => 2)
-  .else(() => 3); // => 3
+  .else(() => 3); // => 2
 ```
 
 ### Async
@@ -59,7 +60,7 @@ branch
 ```
 
 ### Style
-you can use two coding style.
+you can use some coding style.
 
 ```typescript
 // callback style
