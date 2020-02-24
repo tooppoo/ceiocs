@@ -6,17 +6,17 @@ import {
   EachCondition,
   Action
 } from "../type";
-import { ReadonlySyncTupleList, AsyncTupleList } from "../lib/tuple";
+import { TupleList } from "../lib/tuple";
 import { resolve } from "../lib/functions";
 
 export interface AsyncBranchConstructor<T> {
-  new (tuples: AsyncTupleList<T>): AsyncBranch<T>;
+  new (tuples: TupleList<EachCondition, Action<T>>): AsyncBranch<T>;
 }
 
 type MaybeElseIf<Act, Branch> = Branch | { then(a: Act): Branch };
 
-abstract class BaseBranch<Cond, Act, Branch, T> {
-  protected constructor(protected readonly tuples: ReadonlySyncTupleList<T>) {}
+abstract class BaseBranch<Cond, Act, Branch> {
+  constructor(protected tuples: TupleList<Cond, Act>) {}
 
   elseif(c: Cond): { then(a: Act): Branch };
   elseif(c: Cond, a: Act): Branch;
@@ -32,7 +32,7 @@ abstract class BaseBranch<Cond, Act, Branch, T> {
 }
 
 export abstract class BaseSyncBranch<T>
-  extends BaseBranch<SyncEachCondition, SyncAction<T>, SyncBranch<T>, T>
+  extends BaseBranch<SyncEachCondition, SyncAction<T>, SyncBranch<T>>
   implements SyncBranch<T> {
   else(otherAction: SyncAction<T>): T {
     const [, action] = this.tuples.find(([cond]) => resolve(cond)) || [];
@@ -52,7 +52,7 @@ export abstract class BaseSyncBranch<T>
 }
 
 export abstract class BaseAsyncBranch<T>
-  extends BaseBranch<EachCondition, Action<T>, AsyncBranch<T>, T>
+  extends BaseBranch<EachCondition, Action<T>, AsyncBranch<T>>
   implements AsyncBranch<T> {
   async else(otherAction: Action<T>): Promise<T> {
     let action: Action<T> = otherAction;

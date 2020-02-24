@@ -7,7 +7,6 @@ import {
   EachCondition,
   Action
 } from "../type";
-import { ReadonlySyncTupleList, ReadonlyAsyncTupleList } from "../lib/tuple";
 import { buildCondition } from "./builder";
 import {
   BaseSyncBranch,
@@ -24,10 +23,6 @@ class AsyncImmutableBranch<T> extends BaseAsyncBranch<T>
     return new this([[condition, action]]);
   }
 
-  constructor(protected readonly tuples: ReadonlyAsyncTupleList<T>) {
-    super(tuples);
-  }
-
   protected update(c: EachCondition, a: Action<T>): AsyncBranch<T> {
     return new AsyncImmutableBranch([...this.tuples, [c, a]]);
   }
@@ -40,9 +35,6 @@ class SyncImmutableBranch<T> extends BaseSyncBranch<T>
     action: SyncAction<T>
   ): SyncBranch<T> {
     return new this([[condition, action]]);
-  }
-  protected constructor(protected readonly tuples: ReadonlySyncTupleList<T>) {
-    super(tuples);
   }
 
   protected get toAsync(): AsyncBranchConstructor<T> {

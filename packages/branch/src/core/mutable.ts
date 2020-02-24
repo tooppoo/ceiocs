@@ -7,7 +7,6 @@ import {
   EachCondition,
   Action
 } from "../type";
-import { SyncTupleList, AsyncTupleList } from "../lib/tuple";
 import { buildCondition } from "./builder";
 import {
   BaseSyncBranch,
@@ -24,10 +23,6 @@ class AsyncMutableBranch<T> extends BaseAsyncBranch<T>
     return new this([[condition, action]]);
   }
 
-  constructor(protected tuples: AsyncTupleList<T>) {
-    super(tuples);
-  }
-
   protected update(c: EachCondition, a: Action<T>): AsyncBranch<T> {
     this.tuples = [...this.tuples, [c, a]];
 
@@ -41,9 +36,6 @@ class SyncMutableBranch<T> extends BaseSyncBranch<T> implements SyncBranch<T> {
     action: SyncAction<T>
   ): SyncBranch<T> {
     return new this([[condition, action]]);
-  }
-  protected constructor(protected tuples: SyncTupleList<T>) {
-    super(tuples);
   }
 
   protected get toAsync(): AsyncBranchConstructor<T> {
