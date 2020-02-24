@@ -9,9 +9,19 @@ import {
 import { TupleList } from "../lib/tuple";
 import { resolve } from "../lib/functions";
 
-export interface AsyncBranchConstructor<T> {
-  new (tuples: TupleList<EachCondition, Action<T>>): AsyncBranch<T>;
+export interface BranchConstructor<Cond, Act, Branch> {
+  new (tuples: TupleList<Cond, Act>): Branch;
 }
+export type SyncBranchConstructor<T> = BranchConstructor<
+  SyncEachCondition,
+  SyncAction<T>,
+  SyncBranch<T>
+>;
+export type AsyncBranchConstructor<T> = BranchConstructor<
+  EachCondition,
+  Action<T>,
+  AsyncBranch<T>
+>;
 
 type MaybeElseIf<Act, Branch> = Branch | { then(a: Act): Branch };
 
