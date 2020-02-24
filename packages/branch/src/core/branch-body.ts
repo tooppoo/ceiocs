@@ -36,11 +36,11 @@ abstract class BaseBranchBody<Cond, Val, LastVal> {
 }
 
 export class AsyncBranchBody<Val> extends BaseBranchBody<
-  AsyncCondition,
-  AsyncValue<Val>,
+  SyncCondition | AsyncCondition,
+  SyncValue<Val> | AsyncValue<Val>,
   Promise<Val>
 > {
-  async else(otherwise: AsyncValue<Val>): Promise<Val> {
+  async else(otherwise: SyncValue<Val> | AsyncValue<Val>): Promise<Val> {
     let satisfied = otherwise;
 
     for (const { condition, value } of this.states) {
