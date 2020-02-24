@@ -10,33 +10,32 @@ import { SyncBranchBody, AsyncBranchBody } from "./branch-body";
 interface BodyConstructor<Cond = any, Val = any> {
   new (states: BranchState<Cond, Val>[]): any;
 }
-interface SyncIfThen {
-  then<Val>(value: AsyncValue<Val>): AsyncBranchBody<Val>;
-  then<Val>(value: SyncValue<Val>): SyncBranchBody<Val>;
-}
-interface AsyncIfThen {
-  then<Val>(value: AsyncValue<Val>): AsyncBranchBody<Val>;
-}
-abstract class BaseBranchHead {
-  if(condition: AsyncCondition): AsyncIfThen;
+
+interface SyncBranchHeadMethod {
   if(condition: SyncCondition): SyncIfThen;
   if<Val>(
-    condition: AsyncCondition,
-    value: AsyncValue<Val>
-  ): AsyncBranchBody<Val>;
-  if<Val>(
-    condition: AsyncCondition,
-    value: SyncValue<Val>
-  ): AsyncBranchBody<Val>;
-  if<Val>(
     condition: SyncCondition,
-    value: AsyncValue<Val>
-  ): AsyncBranchBody<Val>;
-  if<Val>(condition: SyncCondition, value: SyncValue<Val>): SyncBranchBody<Val>;
+    value: SyncValue<Val>
+  ): Val extends Promise<any> ? never : SyncBranchBody<Val>;
+}
+interface SyncIfThen {
+  then<Val>(
+    value: SyncValue<Val>
+  ): Val extends Promise<any> ? never : SyncBranchBody<Val>;
+}
+
+interface AsyncBranchHeadMethod {
+  if(condition: SyncCondition | AsyncCondition): AsyncIfThen;
   if<Val>(
-    condition: any,
-    value?: any
-  ): AsyncBranchBody<Val> | SyncBranchBody<Val> | AsyncIfThen | SyncIfThen {
+    condition: AsyncCondition | SyncCondition,
+    value: AsyncValue<Val> | SyncValue<Val>
+  ): AsyncBranchBody<Val>;
+}
+interface AsyncIfThen {
+  then<Val>(value: AsyncValue<Val> | SyncValue<Val>): AsyncBranchBody<Val>;
+}
+abstract class BaseBranchHead {
+  if(condition: any, value?: any): any {
     if (!value) {
       return {
         then: <V>(lazyVal: V): any =>
@@ -58,10 +57,15 @@ abstract class BaseBranchHead {
   protected abstract nextBranchBody: BodyConstructor;
 }
 
-class AsyncBranchHead extends BaseBranchHead {
+class AsyncBranchHead extends BaseBranchHead implements AsyncBranchHeadMethod {
+  declare if: AsyncBranchHeadMethod["if"];
+
   protected nextBranchBody = AsyncBranchBody;
 }
-export class SyncBranchHead extends BaseBranchHead {
+export class SyncBranchHead extends BaseBranchHead
+  implements SyncBranchHeadMethod {
+  declare if: SyncBranchHeadMethod["if"];
+
   protected nextBranchBody = SyncBranchBody;
 
   get async(): AsyncBranchHead {
