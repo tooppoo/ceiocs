@@ -54,7 +54,7 @@ branch
   .else(Promise.resolve(20)) // => Promise.resolve(100)
 
 branch
-  .async.if(false, 100)
+  .if(false, 100)
   .async.elseif(true, async () => 50)
   .else(Promise.resolve(20)) // => Promise.resolve(50)
 ```
