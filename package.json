@@ -48,7 +48,7 @@
     "rollup-plugin-istanbul": "2.0.1",
     "rollup-plugin-typescript2": "0.27.1",
     "rollup-plugin-uglify": "6.0.4",
-    "ts-jest": "25.2.1",
+    "ts-jest": "25.5.1",
     "typescript": "3.8.3"
   }
 }
