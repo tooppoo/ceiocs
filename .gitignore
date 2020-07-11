@@ -1,3 +1,4 @@
+.idea
 dist
 
 ### https://raw.github.com/github/gitignore/f1d5981dd5b0ebf95617d73b93c628c2bd741267/Global/VisualStudioCode.gitignore
@@ -66,5 +67,3 @@ typings/
 
 # next.js build output
 .next
-
-
