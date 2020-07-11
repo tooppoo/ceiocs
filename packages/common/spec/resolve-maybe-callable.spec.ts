@@ -1,4 +1,4 @@
-import { resolveMaybeCallable } from "@branch/core/resolve-maybe-callable";
+import { resolveMaybeCallable } from "../src/resolve-maybe-callable";
 
 describe(resolveMaybeCallable, () => {
   describe.each([

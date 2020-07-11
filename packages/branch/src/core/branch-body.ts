@@ -5,7 +5,7 @@ import {
   AsyncCondition,
   AsyncValue
 } from "./branch-state";
-import { resolveMaybeCallable } from "./resolve-maybe-callable";
+import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 
 interface ElseIf<Val, NextBranch> {
   then(value: Val): NextBranch;

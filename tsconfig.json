@@ -6,7 +6,8 @@
     "strict": true,
     "baseUrl": "./packages",
     "paths": {
-      "@branch/*": ["branch/src/*"]
+      "@branch/*": ["branch/src/*"],
+      "@common/*": ["common/src/*"]
     },
     "declaration": true,
     "esModuleInterop": true,
