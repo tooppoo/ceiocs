@@ -79,7 +79,10 @@ describe("match", () => {
         'pattern.match (() => a) case () => a => () => "pattern a" case b => "pattern b" otherwise => () => "default"',
         pattern
           .match(() => "a")
-          .when(() => "a", () => "pattern a")
+          .when(
+            () => "a",
+            () => "pattern a"
+          )
           .when("b", "pattern b")
           .otherwise("default"),
         "pattern a",

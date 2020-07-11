@@ -9,12 +9,16 @@ interface MatchState<Key, Val> {
 }
 
 export class PatternMatch {
-  match<Key>(rootKey: KeyLike<Key>) {
-    return {
-      when<Val>(key: KeyLike<Key>, value: ValueLike<Val>): PatternWhen<Key, Val> {
-        return new PatternWhen<Key, Val>(rootKey, [{ key, value }]);
-      },
-    };
+  match<Key>(rootKey: KeyLike<Key>): HeadOfPatternWhen<Key> {
+    return new HeadOfPatternWhen(rootKey);
+  }
+}
+
+class HeadOfPatternWhen<Key> {
+  constructor(private readonly rootKey: KeyLike<Key>) {}
+
+  when<Val>(key: KeyLike<Key>, value: ValueLike<Val>): PatternWhen<Key, Val> {
+    return new PatternWhen<Key, Val>(this.rootKey, [{ key, value }]);
   }
 }
 
