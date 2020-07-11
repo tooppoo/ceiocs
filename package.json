@@ -27,7 +27,7 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "lint:fix": "eslint . --fix --ext .ts && prettier --write \"./**/*.{js,ts}\"",
+    "lint:fix": "eslint . --fix --ext .ts && prettier --write \"./packages/**/*.{js,ts}\"",
     "test": "jest --coverage=true",
     "prepublishOnly": "NODE_ENV=production npm run build"
   },
