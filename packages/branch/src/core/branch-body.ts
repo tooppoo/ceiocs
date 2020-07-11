@@ -3,7 +3,7 @@ import {
   SyncCondition,
   BranchState,
   AsyncCondition,
-  AsyncValue
+  AsyncValue,
 } from "./branch-state";
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 
@@ -16,7 +16,7 @@ abstract class BaseBranchBody<Cond, Val, LastVal> {
   elseif(condition: any, value?: any): any {
     if (!value) {
       return {
-        then: (lazyVal: Val): this => this.next(condition, lazyVal)
+        then: (lazyVal: Val): this => this.next(condition, lazyVal),
       };
     }
 
@@ -28,7 +28,7 @@ abstract class BaseBranchBody<Cond, Val, LastVal> {
   protected next(condition: Cond, value: Val): this {
     return new (this.constructor as any)([
       ...this.states,
-      { condition, value }
+      { condition, value },
     ]);
   }
 }

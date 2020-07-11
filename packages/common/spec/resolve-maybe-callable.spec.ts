@@ -7,9 +7,9 @@ describe(resolveMaybeCallable, () => {
     [
       function named(): string {
         return "a";
-      }
-    ]
-  ])("%p", funcOrVal => {
+      },
+    ],
+  ])("%p", (funcOrVal) => {
     it("should resolved", () => {
       expect(resolveMaybeCallable(funcOrVal)).toStrictEqual("a");
     });

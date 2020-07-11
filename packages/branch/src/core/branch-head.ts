@@ -3,7 +3,7 @@ import {
   AsyncCondition,
   SyncValue,
   AsyncValue,
-  BranchState
+  BranchState,
 } from "./branch-state";
 import { SyncBranchBody, AsyncBranchBody } from "./branch-body";
 
@@ -39,7 +39,7 @@ abstract class BaseBranchHead {
     if (!value) {
       return {
         then: <V>(lazyVal: V): any =>
-          this.next(this.nextBranchBody, condition, lazyVal)
+          this.next(this.nextBranchBody, condition, lazyVal),
       };
     }
 

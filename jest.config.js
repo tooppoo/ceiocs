@@ -1,7 +1,8 @@
 module.exports = {
   moduleFileExtensions: ["js", "ts"],
   moduleNameMapper: {
-    "@branch\\/(.+)": "<rootDir>/packages/branch/src/$1"
+    "@branch\\/(.+)": "<rootDir>/packages/branch/src/$1",
+    "@common\\/(.+)": "<rootDir>/packages/common/src/$1"
   },
   transform: {
     "^.+\\.ts$": "<rootDir>/node_modules/ts-jest"
