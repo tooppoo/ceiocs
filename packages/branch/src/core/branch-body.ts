@@ -16,16 +16,16 @@ abstract class BaseBranchBody<Cond, Val, LastVal> {
   elseif(condition: any, value?: any): any {
     if (!value) {
       return {
-        then: (lazyVal: Val): this => this.update(condition, lazyVal)
+        then: (lazyVal: Val): this => this.next(condition, lazyVal)
       };
     }
 
-    return this.update(condition, value);
+    return this.next(condition, value);
   }
 
   abstract else(otherwise: Val): LastVal;
 
-  protected update(condition: Cond, value: Val): this {
+  protected next(condition: Cond, value: Val): this {
     return new (this.constructor as any)([
       ...this.states,
       { condition, value }
