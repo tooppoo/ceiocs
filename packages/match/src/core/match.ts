@@ -18,7 +18,7 @@ export class Matcher {
   }
 }
 class AsyncMatcher {
-  constructor(private readonly config: MatchConfig = MatchConfig.default) {}
+  constructor(private readonly config: MatchConfig) {}
 
   match<Key>(rootKey: AsyncableKeyLike<Key>): AsyncHeadOfWhen<Key> {
     return new AsyncHeadOfWhen(this.config, rootKey);
