@@ -1,6 +1,6 @@
-import { Comparator, MatchConfig } from './config'
-import { AsyncableKeyLike, KeyLike } from './type'
-import { AsyncHeadOfWhen, HeadOfWhen } from './when'
+import { Comparator, MatchConfig } from "./config";
+import { AsyncableKeyLike, KeyLike } from "./type";
+import { AsyncHeadOfWhen, HeadOfWhen } from "./when";
 
 export class Matcher {
   constructor(private readonly config: MatchConfig = MatchConfig.default) {}

@@ -1,4 +1,4 @@
-import { MaybeCallable } from '@common/value-type'
+import { MaybeCallable } from "@common/value-type";
 
 const isCallable = <T>(val: any): val is () => T =>
   val instanceof Function || (val.bind && val.call && val.apply);

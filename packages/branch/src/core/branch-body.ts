@@ -1,10 +1,11 @@
-import { MaybeCallable } from '@common/value-type'
+import { MaybeCallable } from "@common/value-type";
 import {
   SyncValue,
   SyncCondition,
   BranchState,
-  AsyncableValue, AsyncableCondition,
-} from './branch-state'
+  AsyncableValue,
+  AsyncableCondition,
+} from "./branch-state";
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 
 interface ElseIf<Val, NextBranch> {
@@ -12,15 +13,28 @@ interface ElseIf<Val, NextBranch> {
 }
 
 export class AsyncBranchBody<Val> {
-  constructor(protected readonly states: readonly BranchState<AsyncableCondition, AsyncableValue<Val>>[]) {}
+  constructor(
+    protected readonly states: readonly BranchState<
+      AsyncableCondition,
+      AsyncableValue<Val>
+    >[]
+  ) {}
 
-  elseif(condition: AsyncableCondition): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>>
-  elseif(condition: AsyncableCondition, value?: AsyncableValue<Val>): AsyncBranchBody<Val>
+  elseif(
+    condition: AsyncableCondition
+  ): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>>;
+  elseif(
+    condition: AsyncableCondition,
+    value?: AsyncableValue<Val>
+  ): AsyncBranchBody<Val>;
   elseif(condition: AsyncableCondition, value?: AsyncableValue<Val>) {
     if (!value) {
       return {
         then: (lazyVal: AsyncableValue<Val>): AsyncBranchBody<Val> =>
-          new AsyncBranchBody<Val>([...this.states, { condition, value: lazyVal }]),
+          new AsyncBranchBody<Val>([
+            ...this.states,
+            { condition, value: lazyVal },
+          ]),
       };
     }
 
@@ -43,21 +57,25 @@ export class AsyncBranchBody<Val> {
 }
 
 export class SyncBranchBody<Val> {
-  constructor(protected readonly states: readonly BranchState<SyncCondition, SyncValue<Val>>[]) {}
+  constructor(
+    protected readonly states: readonly BranchState<
+      SyncCondition,
+      SyncValue<Val>
+    >[]
+  ) {}
 
-  elseif(condition: SyncCondition): ElseIf<SyncValue<Val>, SyncBranchBody<Val>>
-  elseif(condition: SyncCondition, value?: SyncValue<Val>): SyncBranchBody<Val>
+  elseif(condition: SyncCondition): ElseIf<SyncValue<Val>, SyncBranchBody<Val>>;
+  elseif(condition: SyncCondition, value?: SyncValue<Val>): SyncBranchBody<Val>;
   elseif(condition: SyncCondition, value?: SyncValue<Val>) {
     if (!value) {
       return {
         then: (lazyVal: SyncValue<Val>): SyncBranchBody<Val> =>
-          new SyncBranchBody([...this.states, { condition, value: lazyVal }])
+          new SyncBranchBody([...this.states, { condition, value: lazyVal }]),
       };
     }
 
     return new SyncBranchBody([...this.states, { condition, value }]);
   }
-
 
   else(value: SyncValue<Val>): Val {
     const satisfied = this.states.find(({ condition }) =>
