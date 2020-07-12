@@ -2,9 +2,8 @@ import {
   SyncCondition,
   AsyncCondition,
   SyncValue,
-  AsyncValue,
-  BranchState,
-} from "./branch-state";
+  BranchState, AsyncableValue,
+} from './branch-state'
 import { SyncBranchBody, AsyncBranchBody } from "./branch-body";
 
 interface BodyConstructor<Cond = any, Val = any> {
@@ -28,11 +27,11 @@ interface AsyncBranchHeadMethod {
   if(condition: SyncCondition | AsyncCondition): AsyncIfThen;
   if<Val>(
     condition: AsyncCondition | SyncCondition,
-    value: AsyncValue<Val> | SyncValue<Val>
+    value: AsyncableValue<Val>
   ): AsyncBranchBody<Val>;
 }
 interface AsyncIfThen {
-  then<Val>(value: AsyncValue<Val> | SyncValue<Val>): AsyncBranchBody<Val>;
+  then<Val>(value: AsyncableValue<Val>): AsyncBranchBody<Val>;
 }
 abstract class BaseBranchHead {
   if(condition: any, value?: any): any {

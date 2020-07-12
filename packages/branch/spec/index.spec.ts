@@ -1,4 +1,4 @@
-import { branch } from "@branch/index";
+import { branch } from '../src';
 
 describe("branch", () => {
   describe("sync", () => {

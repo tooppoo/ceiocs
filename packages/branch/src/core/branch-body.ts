@@ -3,8 +3,8 @@ import {
   SyncCondition,
   BranchState,
   AsyncCondition,
-  AsyncValue,
-} from "./branch-state";
+  AsyncableValue,
+} from './branch-state'
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 
 interface ElseIf<Val, NextBranch> {
@@ -36,21 +36,21 @@ abstract class BaseBranchBody<Cond, Val, LastVal> {
 interface AsyncBranchBodyMethod<Val> {
   elseif(
     condition: SyncCondition
-  ): ElseIf<AsyncValue<Val> | SyncValue<Val>, AsyncBranchBody<Val>>;
+  ): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>>;
   elseif(
     condition: SyncCondition | AsyncCondition,
-    value: AsyncValue<Val> | SyncValue<Val>
+    value: AsyncableValue<Val>
   ): AsyncBranchBody<Val>;
-  else(value: AsyncValue<Val> | SyncValue<Val>): Promise<Val>;
+  else(value: AsyncableValue<Val>): Promise<Val>;
 }
 export class AsyncBranchBody<Val> extends BaseBranchBody<
   SyncCondition | AsyncCondition,
-  SyncValue<Val> | AsyncValue<Val>,
+  AsyncableValue<Val>,
   Promise<Val>
 > {
   declare elseif: AsyncBranchBodyMethod<Val>["elseif"];
 
-  async else(otherwise: SyncValue<Val> | AsyncValue<Val>): Promise<Val> {
+  async else(otherwise: AsyncableValue<Val>): Promise<Val> {
     let satisfied = otherwise;
 
     for (const { condition, value } of this.states) {
