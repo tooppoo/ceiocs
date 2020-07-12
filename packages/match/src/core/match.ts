@@ -2,10 +2,10 @@ import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 
 type KeyLike<T> = (() => T) | T;
 type ValueLike<T> = (() => T) | T;
-type AsyncKeyLike<T> = (() => Promise<T>) | Promise<T>
-type AsyncValueLike<T> = (() => Promise<T>) | Promise<T>
-type MaybeAsyncKeyLike<T> = AsyncKeyLike<T> | KeyLike<T>
-type MaybeAsyncValueLike<T> = AsyncValueLike<T> | ValueLike<T>
+type AsyncKeyLike<T> = (() => Promise<T>) | Promise<T>;
+type AsyncValueLike<T> = (() => Promise<T>) | Promise<T>;
+type MaybeAsyncKeyLike<T> = AsyncKeyLike<T> | KeyLike<T>;
+type MaybeAsyncValueLike<T> = AsyncValueLike<T> | ValueLike<T>;
 
 interface MatchState<Key, Val> {
   key: KeyLike<Key>;
@@ -18,7 +18,7 @@ export class PatternMatch {
   }
 
   get async(): AsyncPatternMatch {
-    return new AsyncPatternMatch()
+    return new AsyncPatternMatch();
   }
 }
 class AsyncPatternMatch {
@@ -35,14 +35,17 @@ class HeadOfPatternWhen<Key> {
   }
 
   get async(): AsyncHeadOfPatternWhen<Key> {
-    return new AsyncHeadOfPatternWhen<Key>(this.rootKey)
+    return new AsyncHeadOfPatternWhen<Key>(this.rootKey);
   }
 }
 class AsyncHeadOfPatternWhen<Key> {
   constructor(private readonly rootKey: MaybeAsyncKeyLike<Key>) {}
 
-  when<Val>(key: MaybeAsyncKeyLike<Key>, value: MaybeAsyncValueLike<Val> | AsyncValueLike<Val>) {
-    return new AsyncPatternWhen<Key, Val>(this.rootKey, [{ key, value }])
+  when<Val>(
+    key: MaybeAsyncKeyLike<Key>,
+    value: MaybeAsyncValueLike<Val> | AsyncValueLike<Val>
+  ) {
+    return new AsyncPatternWhen<Key, Val>(this.rootKey, [{ key, value }]);
   }
 }
 
@@ -67,34 +70,42 @@ class PatternWhen<Key, Val> {
   }
 
   get async(): AsyncPatternWhen<Key, Val> {
-    return new AsyncPatternWhen<Key, Val>(this.rootKey, this.states)
+    return new AsyncPatternWhen<Key, Val>(this.rootKey, this.states);
   }
 }
 class AsyncPatternWhen<Key, Val> {
   constructor(
     private readonly rootKey: MaybeAsyncKeyLike<Key>,
-    private readonly states: Array<MatchState<Key | Promise<Key>, Val | Promise<Val>>>
+    private readonly states: Array<
+      MatchState<Key | Promise<Key>, Val | Promise<Val>>
+    >
   ) {}
 
-  when(key: MaybeAsyncKeyLike<Key>, value: MaybeAsyncValueLike<Val>): AsyncPatternWhen<Key, Val> {
+  when(
+    key: MaybeAsyncKeyLike<Key>,
+    value: MaybeAsyncValueLike<Val>
+  ): AsyncPatternWhen<Key, Val> {
     return new AsyncPatternWhen<Key, Val>(this.rootKey, [
       ...this.states,
-      { key, value }
-    ])
+      { key, value },
+    ]);
   }
   async otherwise(otherwise: MaybeAsyncValueLike<Val>): Promise<Val> {
-    let matched: MatchState<Key | Promise<Key>, Val | Promise<Val>> | null = null
+    let matched: MatchState<
+      Key | Promise<Key>,
+      Val | Promise<Val>
+    > | null = null;
 
     for (const s of this.states) {
-      const rootKey = await resolveMaybeCallable(this.rootKey)
-      const key = await resolveMaybeCallable(s.key)
+      const rootKey = await resolveMaybeCallable(this.rootKey);
+      const key = await resolveMaybeCallable(s.key);
 
       if (rootKey === key) {
-        matched = s
+        matched = s;
         break;
       }
     }
 
-    return resolveMaybeCallable(matched ? matched.value : otherwise)
+    return resolveMaybeCallable(matched ? matched.value : otherwise);
   }
 }
