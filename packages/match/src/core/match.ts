@@ -13,46 +13,46 @@ interface MatchState<Key, Val> {
   value: Val;
 }
 
-export class PatternMatch {
+export class Matcher {
   constructor(private readonly config: MatchConfig = MatchConfig.default) {}
 
-  case<Key>(rootKey: KeyLike<Key>): HeadOfPatternWhen<Key> {
-    return new HeadOfPatternWhen(this.config, rootKey);
+  case<Key>(rootKey: KeyLike<Key>): HeadOfWhen<Key> {
+    return new HeadOfWhen(this.config, rootKey);
   }
 
-  get async(): AsyncPatternMatch {
-    return new AsyncPatternMatch(this.config);
+  get async(): AsyncMatcher {
+    return new AsyncMatcher(this.config);
   }
 
-  compareBy<T>(matcher: Comparator<T>): PatternMatch {
-    return new PatternMatch(this.config.changeMatcher(matcher));
+  compareBy<T>(matcher: Comparator<T>): Matcher {
+    return new Matcher(this.config.changeMatcher(matcher));
   }
 }
-class AsyncPatternMatch {
+class AsyncMatcher {
   constructor(private readonly config: MatchConfig = MatchConfig.default) {}
 
-  match<Key>(rootKey: AsyncableKeyLike<Key>): AsyncHeadOfPatternWhen<Key> {
-    return new AsyncHeadOfPatternWhen(this.config, rootKey);
+  match<Key>(rootKey: AsyncableKeyLike<Key>): AsyncHeadOfWhen<Key> {
+    return new AsyncHeadOfWhen(this.config, rootKey);
   }
 }
 
-class HeadOfPatternWhen<Key> {
+class HeadOfWhen<Key> {
   constructor(
     private readonly config: MatchConfig,
     private readonly rootKey: KeyLike<Key>
   ) {}
 
-  when<Val>(key: KeyLike<Key>, value: ValueLike<Val>): PatternWhen<Key, Val> {
-    return new PatternWhen<Key, Val>(this.config, this.rootKey, [
+  when<Val>(key: KeyLike<Key>, value: ValueLike<Val>): When<Key, Val> {
+    return new When<Key, Val>(this.config, this.rootKey, [
       { key, value },
     ]);
   }
 
-  get async(): AsyncHeadOfPatternWhen<Key> {
-    return new AsyncHeadOfPatternWhen<Key>(this.config, this.rootKey);
+  get async(): AsyncHeadOfWhen<Key> {
+    return new AsyncHeadOfWhen<Key>(this.config, this.rootKey);
   }
 }
-class AsyncHeadOfPatternWhen<Key> {
+class AsyncHeadOfWhen<Key> {
   constructor(
     private readonly config: MatchConfig,
     private readonly rootKey: AsyncableKeyLike<Key>
@@ -62,21 +62,21 @@ class AsyncHeadOfPatternWhen<Key> {
     key: AsyncableKeyLike<Key>,
     value: AsyncableValueLike<Val>
   ) {
-    return new AsyncPatternWhen<Key, Val>(this.config, this.rootKey, [
+    return new AsyncWhen<Key, Val>(this.config, this.rootKey, [
       { key, value },
     ]);
   }
 }
 
-class PatternWhen<Key, Val> {
+class When<Key, Val> {
   constructor(
     private readonly config: MatchConfig,
     private readonly rootKey: KeyLike<Key>,
     private readonly states: Array<MatchState<KeyLike<Key>, ValueLike<Val>>>
   ) {}
 
-  when(key: KeyLike<Key>, value: ValueLike<Val>): PatternWhen<Key, Val> {
-    return new PatternWhen<Key, Val>(this.config, this.rootKey, [
+  when(key: KeyLike<Key>, value: ValueLike<Val>): When<Key, Val> {
+    return new When<Key, Val>(this.config, this.rootKey, [
       ...this.states,
       { key, value },
     ]);
@@ -92,15 +92,15 @@ class PatternWhen<Key, Val> {
     return resolveMaybeCallable(matched ? matched.value : otherwise);
   }
 
-  get async(): AsyncPatternWhen<Key, Val> {
-    return new AsyncPatternWhen<Key, Val>(
+  get async(): AsyncWhen<Key, Val> {
+    return new AsyncWhen<Key, Val>(
       this.config,
       this.rootKey,
       this.states
     );
   }
 }
-class AsyncPatternWhen<Key, Val> {
+class AsyncWhen<Key, Val> {
   constructor(
     private readonly config: MatchConfig,
     private readonly rootKey: AsyncableKeyLike<Key>,
@@ -112,8 +112,8 @@ class AsyncPatternWhen<Key, Val> {
   when(
     key: AsyncableKeyLike<Key>,
     value: AsyncableValueLike<Val>
-  ): AsyncPatternWhen<AsyncableKeyLike<Key>, AsyncableValueLike<Val>> {
-    return new AsyncPatternWhen<Key, Val>(this.config, this.rootKey, [
+  ): AsyncWhen<AsyncableKeyLike<Key>, AsyncableValueLike<Val>> {
+    return new AsyncWhen<Key, Val>(this.config, this.rootKey, [
       ...this.states,
       { key, value },
     ]);

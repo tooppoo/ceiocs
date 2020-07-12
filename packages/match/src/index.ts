@@ -1,3 +1,3 @@
-import { PatternMatch } from "./core/match";
+import { Matcher } from "./core/match";
 
-export const match = new PatternMatch();
+export const match = new Matcher();
