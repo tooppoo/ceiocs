@@ -1,91 +1,91 @@
-import { cases } from "../src";
+import { match } from "../src";
 
 describe("match", () => {
   describe("sync", () => {
     describe.each([
       [
-        'cases.match (a) case a => "cases a" case b => "cases b" otherwise => "default"',
-        cases
-          .match("a")
-          .when("a", "cases a")
-          .when("b", "cases b")
+        'case.case (a) case a => "case a" case b => "case b" otherwise => "default"',
+        match
+          .case("a")
+          .when("a", "case a")
+          .when("b", "case b")
           .otherwise("default"),
-        "cases a",
+        "case a",
       ],
       [
-        'cases.match (b) case a => "cases a" case b => "cases b" otherwise => "default"',
-        cases
-          .match("b")
-          .when("a", "cases a")
-          .when("b", "cases b")
+        'case.case (b) case a => "case a" case b => "case b" otherwise => "default"',
+        match
+          .case("b")
+          .when("a", "case a")
+          .when("b", "case b")
           .otherwise("default"),
-        "cases b",
+        "case b",
       ],
       [
-        'cases.match (x) case a => "cases a" case b => "cases b" otherwise => "default"',
-        cases
-          .match("x")
-          .when("a", "cases a")
-          .when("b", "cases b")
+        'case.case (x) case a => "case a" case b => "case b" otherwise => "default"',
+        match
+          .case("x")
+          .when("a", "case a")
+          .when("b", "case b")
           .otherwise("default"),
         "default",
       ],
       [
-        'cases.match (() => a) case a => "cases a" case b => "cases b" otherwise => "default"',
-        cases
-          .match(() => "a")
-          .when("a", "cases a")
-          .when("b", "cases b")
+        'case.case (() => a) case a => "case a" case b => "case b" otherwise => "default"',
+        match
+          .case(() => "a")
+          .when("a", "case a")
+          .when("b", "case b")
           .otherwise("default"),
-        "cases a",
+        "case a",
       ],
       [
-        'cases.match (b) case a => "cases a" case () => b => "cases b" otherwise => "default"',
-        cases
-          .match("b")
-          .when("a", "cases a")
-          .when(() => "b", "cases b")
+        'case.case (b) case a => "case a" case () => b => "case b" otherwise => "default"',
+        match
+          .case("b")
+          .when("a", "case a")
+          .when(() => "b", "case b")
           .otherwise("default"),
-        "cases b",
+        "case b",
       ],
       [
-        'cases.match (a) case a => () => "cases a" case b => "cases b" otherwise => "default"',
-        cases
-          .match("a")
-          .when("a", () => "cases a")
-          .when("b", "cases b")
+        'case.case (a) case a => () => "case a" case b => "case b" otherwise => "default"',
+        match
+          .case("a")
+          .when("a", () => "case a")
+          .when("b", "case b")
           .otherwise("default"),
-        "cases a",
+        "case a",
       ],
       [
-        'cases.match (a) case a => "cases a" case b => () => "cases b" otherwise => "default"',
-        cases
-          .match("b")
-          .when("a", "cases a")
-          .when("b", () => "cases b")
+        'case.case (a) case a => "case a" case b => () => "case b" otherwise => "default"',
+        match
+          .case("b")
+          .when("a", "case a")
+          .when("b", () => "case b")
           .otherwise("default"),
-        "cases b",
+        "case b",
       ],
       [
-        'cases.match (x) case a => "cases a" case b => "cases b" otherwise => () => "default"',
-        cases
-          .match("x")
-          .when("a", "cases a")
-          .when("b", "cases b")
+        'case.case (x) case a => "case a" case b => "case b" otherwise => () => "default"',
+        match
+          .case("x")
+          .when("a", "case a")
+          .when("b", "case b")
           .otherwise(() => "default"),
         "default",
       ],
       [
-        'cases.match (() => a) case () => a => () => "cases a" case b => "cases b" otherwise => () => "default"',
-        cases
-          .match(() => "a")
+        'case.case (() => a) case () => a => () => "case a" case b => "case b" otherwise => () => "default"',
+        match
+          .case(() => "a")
           .when(
             () => "a",
-            () => "cases a"
+            () => "case a"
           )
-          .when("b", "cases b")
+          .when("b", "case b")
           .otherwise("default"),
-        "cases a",
+        "case a",
       ],
     ])("when %s", (_case, actual, expected) => {
       it(`should return ${expected}`, () => {
@@ -96,56 +96,56 @@ describe("match", () => {
   describe('async', () => {
     describe.each([
       [
-        'cases.match (async a) case a => "cases a" case b => "cases b" otherwise => "default"',
-        cases.async
+        'case.case (async a) case a => "case a" case b => "case b" otherwise => "default"',
+        match.async
           .match(Promise.resolve('a'))
-          .when('a', 'cases a')
-          .when('b', 'cases b')
+          .when('a', 'case a')
+          .when('b', 'case b')
           .otherwise('default'),
-        'cases a'
+        'case a'
       ],
       [
-        'cases.match (a) case a => async "cases a" case b => async "cases b" otherwise => "default"',
-        cases
-          .match('b').async
-          .when('a', Promise.resolve('cases a'))
-          .when('b', Promise.resolve('cases b'))
+        'case.case (a) case a => async "case a" case b => async "case b" otherwise => "default"',
+        match
+          .case('b').async
+          .when('a', Promise.resolve('case a'))
+          .when('b', Promise.resolve('case b'))
           .otherwise('default'),
-        'cases b'
+        'case b'
       ],
       [
-        'cases.match (x) case a => async "cases a" case b => async () => "cases b" otherwise => "default"',
-        cases
-          .match('x').async
-          .when('a', Promise.resolve('cases a'))
-          .when('b', Promise.resolve('cases b'))
+        'case.case (x) case a => async "case a" case b => async () => "case b" otherwise => "default"',
+        match
+          .case('x').async
+          .when('a', Promise.resolve('case a'))
+          .when('b', Promise.resolve('case b'))
           .otherwise('default'),
         'default'
       ],
       [
         'use async callback on key',
-        cases.async
+        match.async
           .match(async () => 'b')
-          .when(async () => 'a', 'cases a')
-          .when(async () => 'b', 'cases b')
+          .when(async () => 'a', 'case a')
+          .when(async () => 'b', 'case b')
           .otherwise('default'),
-        'cases b'
+        'case b'
       ],
       [
         'use async callback on value',
-        cases.async
+        match.async
           .match(async () => 'x')
-          .when(async () => 'a', async () => 'cases a')
-          .when(async () => 'b', async () => 'cases b')
+          .when(async () => 'a', async () => 'case a')
+          .when(async () => 'b', async () => 'case b')
           .otherwise('default'),
         'default'
       ],
       [
         'mix async callback',
-        cases.async
+        match.async
           .match(async () => 'x')
-          .when('a', async () => 'cases a')
-          .when(() => 'b', () => 'cases b')
+          .when('a', async () => 'case a')
+          .when(() => 'b', () => 'case b')
           .otherwise('default'),
         'default'
       ],

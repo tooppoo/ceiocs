@@ -13,7 +13,7 @@ interface MatchState<Key, Val> {
 }
 
 export class PatternMatch {
-  match<Key>(rootKey: KeyLike<Key>): HeadOfPatternWhen<Key> {
+  case<Key>(rootKey: KeyLike<Key>): HeadOfPatternWhen<Key> {
     return new HeadOfPatternWhen(rootKey);
   }
 
