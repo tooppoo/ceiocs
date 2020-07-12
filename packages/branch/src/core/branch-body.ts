@@ -1,3 +1,4 @@
+import { MaybeCallable } from '@common/value-type'
 import {
   SyncValue,
   SyncCondition,
@@ -64,8 +65,8 @@ export class SyncBranchBody<Val> {
     );
 
     return satisfied
-      ? resolveMaybeCallable(satisfied.value)
-      : resolveMaybeCallable(value);
+      ? resolveMaybeCallable(satisfied.value as MaybeCallable<Val>)
+      : resolveMaybeCallable(value as MaybeCallable<Val>);
   }
 
   get async(): AsyncBranchBody<Val> {

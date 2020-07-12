@@ -1,3 +1,4 @@
+import { MustSync } from '@common/value-type'
 import {
   SyncCondition,
   SyncValue,
@@ -8,7 +9,7 @@ import { SyncBranchBody, AsyncBranchBody } from "./branch-body";
 interface SyncIfThen {
   then<Val>(
     value: SyncValue<Val>
-  ): Val extends Promise<any> ? never : SyncBranchBody<Val>;
+  ): MustSync<Val,  SyncBranchBody<Val>>;
 }
 interface AsyncIfThen {
   then<Val>(value: AsyncableValue<Val>): AsyncBranchBody<Val>;
