@@ -114,12 +114,21 @@ describe("match", () => {
         "case b",
       ],
       [
-        'match.case (x) case a => async "case a" case b => async () => "case b" otherwise => "default"',
+        'match.case (x) case a => "case a" case b => async () => "case b" otherwise => "default"',
         match
           .case("x")
-          .async.when("a", Promise.resolve("case a"))
-          .when("b", Promise.resolve("case b"))
+          .when("a", "case a")
+          .async.when("b", Promise.resolve("case b"))
           .otherwise("default"),
+        "default",
+      ],
+      [
+        'match.case (x) case a => "case a" case b => "case b" otherwise => async "default"',
+        match
+          .case("x")
+          .when("a", "case a")
+          .when("b", "case b")
+          .async.otherwise(Promise.resolve("default")),
         "default",
       ],
       [
