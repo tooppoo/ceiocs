@@ -4,7 +4,7 @@ describe("match", () => {
   describe("sync", () => {
     describe.each([
       [
-        'case.case (a) case a => "case a" case b => "case b" otherwise => "default"',
+        'match.case (a) case a => "case a" case b => "case b" otherwise => "default"',
         match
           .case("a")
           .when("a", "case a")
@@ -13,7 +13,7 @@ describe("match", () => {
         "case a",
       ],
       [
-        'case.case (b) case a => "case a" case b => "case b" otherwise => "default"',
+        'match.case (b) case a => "case a" case b => "case b" otherwise => "default"',
         match
           .case("b")
           .when("a", "case a")
@@ -22,7 +22,7 @@ describe("match", () => {
         "case b",
       ],
       [
-        'case.case (x) case a => "case a" case b => "case b" otherwise => "default"',
+        'match.case (x) case a => "case a" case b => "case b" otherwise => "default"',
         match
           .case("x")
           .when("a", "case a")
@@ -31,7 +31,7 @@ describe("match", () => {
         "default",
       ],
       [
-        'case.case (() => a) case a => "case a" case b => "case b" otherwise => "default"',
+        'match.case (() => a) case a => "case a" case b => "case b" otherwise => "default"',
         match
           .case(() => "a")
           .when("a", "case a")
@@ -40,7 +40,7 @@ describe("match", () => {
         "case a",
       ],
       [
-        'case.case (b) case a => "case a" case () => b => "case b" otherwise => "default"',
+        'match.case (b) case a => "case a" case () => b => "case b" otherwise => "default"',
         match
           .case("b")
           .when("a", "case a")
@@ -49,7 +49,7 @@ describe("match", () => {
         "case b",
       ],
       [
-        'case.case (a) case a => () => "case a" case b => "case b" otherwise => "default"',
+        'match.case (a) case a => () => "case a" case b => "case b" otherwise => "default"',
         match
           .case("a")
           .when("a", () => "case a")
@@ -58,7 +58,7 @@ describe("match", () => {
         "case a",
       ],
       [
-        'case.case (a) case a => "case a" case b => () => "case b" otherwise => "default"',
+        'match.case (a) case a => "case a" case b => () => "case b" otherwise => "default"',
         match
           .case("b")
           .when("a", "case a")
@@ -67,7 +67,7 @@ describe("match", () => {
         "case b",
       ],
       [
-        'case.case (x) case a => "case a" case b => "case b" otherwise => () => "default"',
+        'match.case (x) case a => "case a" case b => "case b" otherwise => () => "default"',
         match
           .case("x")
           .when("a", "case a")
@@ -76,7 +76,7 @@ describe("match", () => {
         "default",
       ],
       [
-        'case.case (() => a) case () => a => () => "case a" case b => "case b" otherwise => () => "default"',
+        'match.case (() => a) case () => a => () => "case a" case b => "case b" otherwise => () => "default"',
         match
           .case(() => "a")
           .when(
@@ -96,7 +96,7 @@ describe("match", () => {
   describe("async", () => {
     describe.each([
       [
-        'case.case (async a) case a => "case a" case b => "case b" otherwise => "default"',
+        'match.case (async a) case a => "case a" case b => "case b" otherwise => "default"',
         match.async
           .match(Promise.resolve("a"))
           .when("a", "case a")
@@ -105,7 +105,7 @@ describe("match", () => {
         "case a",
       ],
       [
-        'case.case (a) case a => async "case a" case b => async "case b" otherwise => "default"',
+        'match.case (a) case a => async "case a" case b => async "case b" otherwise => "default"',
         match
           .case("b")
           .async.when("a", Promise.resolve("case a"))
@@ -114,7 +114,7 @@ describe("match", () => {
         "case b",
       ],
       [
-        'case.case (x) case a => async "case a" case b => async () => "case b" otherwise => "default"',
+        'match.case (x) case a => async "case a" case b => async () => "case b" otherwise => "default"',
         match
           .case("x")
           .async.when("a", Promise.resolve("case a"))
