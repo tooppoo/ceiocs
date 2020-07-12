@@ -1,70 +1,46 @@
 import {
   SyncCondition,
   SyncValue,
-  BranchState, AsyncableValue, AsyncableCondition,
+  AsyncableValue, AsyncableCondition,
 } from './branch-state'
 import { SyncBranchBody, AsyncBranchBody } from "./branch-body";
 
-interface BodyConstructor<Cond = any, Val = any> {
-  new (states: BranchState<Cond, Val>[]): any;
-}
-
-interface SyncBranchHeadMethod {
-  if(condition: SyncCondition): SyncIfThen;
-  if<Val>(
-    condition: SyncCondition,
-    value: SyncValue<Val>
-  ): Val extends Promise<any> ? never : SyncBranchBody<Val>;
-}
 interface SyncIfThen {
   then<Val>(
     value: SyncValue<Val>
   ): Val extends Promise<any> ? never : SyncBranchBody<Val>;
 }
-
-interface AsyncBranchHeadMethod {
-  if(condition: AsyncableCondition): AsyncIfThen;
-  if<Val>(
-    condition: AsyncableCondition,
-    value: AsyncableValue<Val>
-  ): AsyncBranchBody<Val>;
-}
 interface AsyncIfThen {
   then<Val>(value: AsyncableValue<Val>): AsyncBranchBody<Val>;
 }
-abstract class BaseBranchHead {
-  if(condition: any, value?: any): any {
+
+class AsyncBranchHead {
+  if(condition: AsyncableCondition): AsyncIfThen
+  if<Val>(condition: AsyncableCondition, value: AsyncableValue<Val>): AsyncBranchBody<Val>
+  if<Val>(condition: AsyncableCondition, value?: AsyncableValue<Val>) {
     if (!value) {
       return {
-        then: <V>(lazyVal: V): any =>
-          this.next(this.nextBranchBody, condition, lazyVal),
+        then: <V>(lazyVal: AsyncableValue<V>): AsyncBranchBody<V> =>
+          new AsyncBranchBody([{ condition, value: lazyVal }])
       };
     }
 
-    return this.next(this.nextBranchBody, condition, value);
+    return new AsyncBranchBody([{ condition, value }]);
   }
+}
+export class SyncBranchHead {
+  if(condition: SyncCondition): SyncIfThen
+  if<Val>(condition: SyncCondition, value: SyncValue<Val>): SyncBranchBody<Val>
+  if<Val>(condition: SyncCondition, value?: SyncValue<Val>) {
+    if (!value) {
+      return {
+        then: <V>(lazyVal: SyncValue<V>): SyncBranchBody<V> =>
+          new SyncBranchBody([{ condition, value: lazyVal }])
+      };
+    }
 
-  protected next<Cond, Val>(
-    constructor: BodyConstructor<Cond, Val>,
-    condition: Cond,
-    value: Val
-  ): any {
-    return new constructor([{ condition, value }]);
+    return new SyncBranchBody([{ condition, value }]);
   }
-
-  protected abstract nextBranchBody: BodyConstructor;
-}
-
-class AsyncBranchHead extends BaseBranchHead implements AsyncBranchHeadMethod {
-  declare if: AsyncBranchHeadMethod["if"];
-
-  protected nextBranchBody = AsyncBranchBody;
-}
-export class SyncBranchHead extends BaseBranchHead
-  implements SyncBranchHeadMethod {
-  declare if: SyncBranchHeadMethod["if"];
-
-  protected nextBranchBody = SyncBranchBody;
 
   get async(): AsyncBranchHead {
     return new AsyncBranchHead();

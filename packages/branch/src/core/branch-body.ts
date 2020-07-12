@@ -9,46 +9,22 @@ import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 interface ElseIf<Val, NextBranch> {
   then(value: Val): NextBranch;
 }
-abstract class BaseBranchBody<Cond, Val, LastVal> {
-  constructor(protected readonly states: readonly BranchState<Cond, Val>[]) {}
 
-  elseif(condition: any, value?: any): any {
+export class AsyncBranchBody<Val> {
+  constructor(protected readonly states: readonly BranchState<AsyncableCondition, AsyncableValue<Val>>[]) {}
+
+  elseif(condition: AsyncableCondition): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>>
+  elseif(condition: AsyncableCondition, value?: AsyncableValue<Val>): AsyncBranchBody<Val>
+  elseif(condition: AsyncableCondition, value?: AsyncableValue<Val>) {
     if (!value) {
       return {
-        then: (lazyVal: Val): this => this.next(condition, lazyVal),
+        then: (lazyVal: AsyncableValue<Val>): AsyncBranchBody<Val> =>
+          new AsyncBranchBody<Val>([...this.states, { condition, value: lazyVal }]),
       };
     }
 
-    return this.next(condition, value);
+    return new AsyncBranchBody<Val>([...this.states, { condition, value }]);
   }
-
-  abstract else(otherwise: Val): LastVal;
-
-  protected next(condition: Cond, value: Val): this {
-    return new (this.constructor as any)([
-      ...this.states,
-      { condition, value },
-    ]);
-  }
-}
-
-interface AsyncBranchBodyMethod<Val> {
-  elseif(
-    condition: SyncCondition
-  ): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>>;
-  elseif(
-    condition: AsyncableCondition,
-    value: AsyncableValue<Val>
-  ): AsyncBranchBody<Val>;
-  else(value: AsyncableValue<Val>): Promise<Val>;
-}
-export class AsyncBranchBody<Val> extends BaseBranchBody<
-  AsyncableCondition,
-  AsyncableValue<Val>,
-  Promise<Val>
-> {
-  declare elseif: AsyncBranchBodyMethod<Val>["elseif"];
-
   async else(otherwise: AsyncableValue<Val>): Promise<Val> {
     let satisfied = otherwise;
 
@@ -65,24 +41,22 @@ export class AsyncBranchBody<Val> extends BaseBranchBody<
   }
 }
 
-interface SyncBranchBodyMethod<Val> {
-  elseif(
-    condition: SyncCondition
-  ): Val extends Promise<any>
-    ? never
-    : ElseIf<SyncValue<Val>, SyncBranchBodyMethod<Val>>;
-  elseif(
-    condition: SyncCondition,
-    value: SyncValue<Val>
-  ): Val extends Promise<any> ? never : SyncBranchBody<Val>;
-  else(value: SyncValue<Val>): Val;
-}
-export class SyncBranchBody<Val> extends BaseBranchBody<
-  SyncCondition,
-  SyncValue<Val>,
-  Val
-> {
-  declare elseif: SyncBranchBodyMethod<Val>["elseif"];
+export class SyncBranchBody<Val> {
+  constructor(protected readonly states: readonly BranchState<SyncCondition, SyncValue<Val>>[]) {}
+
+  elseif(condition: SyncCondition): ElseIf<SyncValue<Val>, SyncBranchBody<Val>>
+  elseif(condition: SyncCondition, value?: SyncValue<Val>): SyncBranchBody<Val>
+  elseif(condition: SyncCondition, value?: SyncValue<Val>) {
+    if (!value) {
+      return {
+        then: (lazyVal: SyncValue<Val>): SyncBranchBody<Val> =>
+          new SyncBranchBody([...this.states, { condition, value: lazyVal }])
+      };
+    }
+
+    return new SyncBranchBody([...this.states, { condition, value }]);
+  }
+
 
   else(value: SyncValue<Val>): Val {
     const satisfied = this.states.find(({ condition }) =>
