@@ -1,4 +1,3 @@
-import { MustSync } from "@common/value-type";
 import {
   SyncCondition,
   SyncValue,
@@ -8,7 +7,7 @@ import {
 import { SyncBranchBody, AsyncBranchBody } from "./branch-body";
 
 interface SyncIfThen {
-  then<Val>(value: SyncValue<Val>): MustSync<Val, SyncBranchBody<Val>>;
+  then<Val>(value: SyncValue<Val>): SyncBranchBody<Val>;
 }
 interface AsyncIfThen {
   then<Val>(value: AsyncableValue<Val>): AsyncBranchBody<Val>;
@@ -20,7 +19,10 @@ class AsyncBranchHead {
     condition: AsyncableCondition,
     value: AsyncableValue<Val>
   ): AsyncBranchBody<Val>;
-  if<Val>(condition: AsyncableCondition, value?: AsyncableValue<Val>) {
+  if<Val>(
+    condition: AsyncableCondition,
+    value?: AsyncableValue<Val>
+  ): AsyncIfThen | AsyncBranchBody<Val> {
     if (!value) {
       return {
         then: <V>(lazyVal: AsyncableValue<V>): AsyncBranchBody<V> =>
@@ -34,7 +36,10 @@ class AsyncBranchHead {
 export class SyncBranchHead {
   if(condition: SyncCondition): SyncIfThen;
   if<Val>(condition: SyncCondition, value: SyncValue<Val>): SyncBranchBody<Val>;
-  if<Val>(condition: SyncCondition, value?: SyncValue<Val>) {
+  if<Val>(
+    condition: SyncCondition,
+    value?: SyncValue<Val>
+  ): SyncIfThen | SyncBranchBody<Val> {
     if (!value) {
       return {
         then: <V>(lazyVal: SyncValue<V>): SyncBranchBody<V> =>

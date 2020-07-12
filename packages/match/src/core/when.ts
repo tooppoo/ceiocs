@@ -1,5 +1,5 @@
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
-import { MaybeAsync, MaybeCallable, MustSync } from '@common/value-type'
+import { MaybeAsync, MaybeCallable, MustSync } from "@common/value-type";
 import { MatchConfig } from "./config";
 import { AsyncableKeyLike, KeyLike } from "./type";
 
@@ -32,7 +32,10 @@ export class AsyncHeadOfWhen<Key> {
     private readonly rootKey: AsyncableKeyLike<Key>
   ) {}
 
-  when<Val>(key: AsyncableKeyLike<Key>, value: AsyncableValueLike<Val>) {
+  when<Val>(
+    key: AsyncableKeyLike<Key>,
+    value: AsyncableValueLike<Val>
+  ): AsyncWhen<Key, Val> {
     return new AsyncWhen<Key, Val>(this.config, this.rootKey, [{ key, value }]);
   }
 }
@@ -59,7 +62,9 @@ class When<Key, Val> {
       )
     );
 
-    return resolveMaybeCallable((matched ? matched.value : otherwise) as MaybeCallable<Val>);
+    return resolveMaybeCallable(
+      (matched ? matched.value : otherwise) as MaybeCallable<Val>
+    );
   }
 
   get async(): AsyncWhen<Key, Val> {

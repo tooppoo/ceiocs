@@ -27,7 +27,10 @@ export class AsyncBranchBody<Val> {
     condition: AsyncableCondition,
     value?: AsyncableValue<Val>
   ): AsyncBranchBody<Val>;
-  elseif(condition: AsyncableCondition, value?: AsyncableValue<Val>) {
+  elseif(
+    condition: AsyncableCondition,
+    value?: AsyncableValue<Val>
+  ): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>> | AsyncBranchBody<Val> {
     if (!value) {
       return {
         then: (lazyVal: AsyncableValue<Val>): AsyncBranchBody<Val> =>
@@ -66,7 +69,10 @@ export class SyncBranchBody<Val> {
 
   elseif(condition: SyncCondition): ElseIf<SyncValue<Val>, SyncBranchBody<Val>>;
   elseif(condition: SyncCondition, value?: SyncValue<Val>): SyncBranchBody<Val>;
-  elseif(condition: SyncCondition, value?: SyncValue<Val>) {
+  elseif(
+    condition: SyncCondition,
+    value?: SyncValue<Val>
+  ): ElseIf<SyncValue<Val>, SyncBranchBody<Val>> | SyncBranchBody<Val> {
     if (!value) {
       return {
         then: (lazyVal: SyncValue<Val>): SyncBranchBody<Val> =>
@@ -82,7 +88,9 @@ export class SyncBranchBody<Val> {
       resolveMaybeCallable(condition)
     );
 
-    return resolveMaybeCallable((satisfied ? satisfied.value : value) as MaybeCallable<Val>)
+    return resolveMaybeCallable(
+      (satisfied ? satisfied.value : value) as MaybeCallable<Val>
+    );
   }
 
   get async(): AsyncBranchBody<Val> {
