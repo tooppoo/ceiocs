@@ -9,8 +9,8 @@ type AsyncableKeyLike<T> = KeyLike<MaybeAsync<T>>;
 type AsyncableValueLike<T> = ValueLike<MaybeAsync<T>>;
 
 interface MatchState<Key, Val> {
-  key: KeyLike<Key>;
-  value: ValueLike<Val>;
+  key: Key;
+  value: Val;
 }
 
 export class PatternMatch {
@@ -72,7 +72,7 @@ class PatternWhen<Key, Val> {
   constructor(
     private readonly config: MatchConfig,
     private readonly rootKey: KeyLike<Key>,
-    private readonly states: Array<MatchState<Key, Val>>
+    private readonly states: Array<MatchState<KeyLike<Key>, ValueLike<Val>>>
   ) {}
 
   when(key: KeyLike<Key>, value: ValueLike<Val>): PatternWhen<Key, Val> {
@@ -105,14 +105,14 @@ class AsyncPatternWhen<Key, Val> {
     private readonly config: MatchConfig,
     private readonly rootKey: AsyncableKeyLike<Key>,
     private readonly states: Array<
-      MatchState<Key | Promise<Key>, Val | Promise<Val>>
+      MatchState<AsyncableKeyLike<Key>, AsyncableValueLike<Val>>
     >
   ) {}
 
   when(
     key: AsyncableKeyLike<Key>,
     value: AsyncableValueLike<Val>
-  ): AsyncPatternWhen<Key, Val> {
+  ): AsyncPatternWhen<AsyncableKeyLike<Key>, AsyncableValueLike<Val>> {
     return new AsyncPatternWhen<Key, Val>(this.config, this.rootKey, [
       ...this.states,
       { key, value },
@@ -120,8 +120,8 @@ class AsyncPatternWhen<Key, Val> {
   }
   async otherwise(otherwise: AsyncableValueLike<Val>): Promise<Val> {
     let matched: MatchState<
-      Key | Promise<Key>,
-      Val | Promise<Val>
+      AsyncableKeyLike<Key>,
+      AsyncableValueLike<Val>
     > | null = null;
 
     for (const s of this.states) {
