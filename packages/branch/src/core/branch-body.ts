@@ -2,8 +2,7 @@ import {
   SyncValue,
   SyncCondition,
   BranchState,
-  AsyncCondition,
-  AsyncableValue,
+  AsyncableValue, AsyncableCondition,
 } from './branch-state'
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 
@@ -38,13 +37,13 @@ interface AsyncBranchBodyMethod<Val> {
     condition: SyncCondition
   ): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>>;
   elseif(
-    condition: SyncCondition | AsyncCondition,
+    condition: AsyncableCondition,
     value: AsyncableValue<Val>
   ): AsyncBranchBody<Val>;
   else(value: AsyncableValue<Val>): Promise<Val>;
 }
 export class AsyncBranchBody<Val> extends BaseBranchBody<
-  SyncCondition | AsyncCondition,
+  AsyncableCondition,
   AsyncableValue<Val>,
   Promise<Val>
 > {

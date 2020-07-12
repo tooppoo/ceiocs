@@ -1,8 +1,7 @@
 import {
   SyncCondition,
-  AsyncCondition,
   SyncValue,
-  BranchState, AsyncableValue,
+  BranchState, AsyncableValue, AsyncableCondition,
 } from './branch-state'
 import { SyncBranchBody, AsyncBranchBody } from "./branch-body";
 
@@ -24,9 +23,9 @@ interface SyncIfThen {
 }
 
 interface AsyncBranchHeadMethod {
-  if(condition: SyncCondition | AsyncCondition): AsyncIfThen;
+  if(condition: AsyncableCondition): AsyncIfThen;
   if<Val>(
-    condition: AsyncCondition | SyncCondition,
+    condition: AsyncableCondition,
     value: AsyncableValue<Val>
   ): AsyncBranchBody<Val>;
 }
