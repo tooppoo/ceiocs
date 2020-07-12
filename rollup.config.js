@@ -19,12 +19,14 @@ const plugins = {
 };
 
 const formats = ["cjs", "es", "amd", "umd"];
+const ignorePackage = new Set(['common'])
 const packages = fs
   .readdirSync(path.resolve(__dirname, "packages"), {
     withFileTypes: true
   })
   .filter(maybeDir => maybeDir.isDirectory())
-  .map(dir => dir.name);
+  .map(dir => dir.name)
+  .filter(pkg => !ignorePackage.has(pkg))
 
 const configsForEachPackage = packages.reduce(
   (prev, pkg) => [
