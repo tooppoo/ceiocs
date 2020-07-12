@@ -1,10 +1,10 @@
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
-import { MaybeAsync, MaybeCallable } from "@common/value-type";
+import { MaybeAsync, MaybeCallable, MustSync } from '@common/value-type'
 import { MatchConfig } from "./config";
 import { AsyncableKeyLike, KeyLike } from "./type";
 
-type ValueLike<T> = MaybeCallable<T>;
-type AsyncableValueLike<T> = ValueLike<MaybeAsync<T>>;
+type ValueLike<T> = MustSync<T, MaybeCallable<T>>;
+type AsyncableValueLike<T> = MaybeCallable<MaybeAsync<T>>;
 
 interface MatchState<Key, Val> {
   key: Key;
@@ -59,7 +59,7 @@ class When<Key, Val> {
       )
     );
 
-    return resolveMaybeCallable(matched ? matched.value : otherwise);
+    return resolveMaybeCallable((matched ? matched.value : otherwise) as MaybeCallable<Val>);
   }
 
   get async(): AsyncWhen<Key, Val> {

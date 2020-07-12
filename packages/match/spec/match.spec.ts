@@ -1,4 +1,4 @@
-import { match } from "../src";
+import { match } from "@match/index";
 
 describe("match", () => {
   describe("sync", () => {

@@ -7,6 +7,7 @@
     "baseUrl": "./packages",
     "paths": {
       "@branch/*": ["branch/src/*"],
+      "@match/*": ["match/src/*"],
       "@common/*": ["common/src/*"]
     },
     "declaration": true,
