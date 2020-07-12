@@ -172,4 +172,46 @@ describe("match", () => {
         expect(actual).resolves.toBe(expected));
     });
   });
+  describe("compareBy object", () => {
+    interface TestObject {
+      value: number;
+    }
+
+    describe("local", () => {
+      const matchLocal = match.compareBy(
+        (a: TestObject, b: TestObject) => a.value === b.value
+      );
+
+      describe.each([
+        [
+          "first matched",
+          matchLocal
+            .case({ value: 1 })
+            .when({ value: 1 }, "matched")
+            .when({ value: 2 }, "not match")
+            .otherwise("default"),
+        ],
+        [
+          "second matched",
+          matchLocal
+            .case({ value: 1 })
+            .when({ value: 2 }, "not match")
+            .when({ value: 1 }, "matched")
+            .otherwise("default"),
+        ],
+        [
+          "otherwise matched",
+          matchLocal
+            .case({ value: 1 })
+            .when({ value: 2 }, "not match")
+            .when({ value: 2 }, "not match")
+            .otherwise("matched"),
+        ],
+      ])("when %s", (_case, actual) => {
+        it("should return matched", () => {
+          expect(actual).toBe("matched");
+        });
+      });
+    });
+  });
 });

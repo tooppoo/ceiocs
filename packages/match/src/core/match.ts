@@ -1,4 +1,5 @@
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
+import { MatchConfig, Comparator } from "./config";
 
 type KeyLike<T> = (() => T) | T;
 type ValueLike<T> = (() => T) | T;
@@ -13,68 +14,95 @@ interface MatchState<Key, Val> {
 }
 
 export class PatternMatch {
+  constructor(private readonly config: MatchConfig = MatchConfig.default) {}
+
   case<Key>(rootKey: KeyLike<Key>): HeadOfPatternWhen<Key> {
-    return new HeadOfPatternWhen(rootKey);
+    return new HeadOfPatternWhen(this.config, rootKey);
   }
 
   get async(): AsyncPatternMatch {
-    return new AsyncPatternMatch();
+    return new AsyncPatternMatch(this.config);
+  }
+
+  compareBy<T>(matcher: Comparator<T>): PatternMatch {
+    return new PatternMatch(this.config.changeMatcher(matcher));
   }
 }
 class AsyncPatternMatch {
+  constructor(private readonly config: MatchConfig = MatchConfig.default) {}
+
   match<Key>(rootKey: MaybeAsyncKeyLike<Key>): AsyncHeadOfPatternWhen<Key> {
-    return new AsyncHeadOfPatternWhen(rootKey);
+    return new AsyncHeadOfPatternWhen(this.config, rootKey);
   }
 }
 
 class HeadOfPatternWhen<Key> {
-  constructor(private readonly rootKey: KeyLike<Key>) {}
+  constructor(
+    private readonly config: MatchConfig,
+    private readonly rootKey: KeyLike<Key>
+  ) {}
 
   when<Val>(key: KeyLike<Key>, value: ValueLike<Val>): PatternWhen<Key, Val> {
-    return new PatternWhen<Key, Val>(this.rootKey, [{ key, value }]);
+    return new PatternWhen<Key, Val>(this.config, this.rootKey, [
+      { key, value },
+    ]);
   }
 
   get async(): AsyncHeadOfPatternWhen<Key> {
-    return new AsyncHeadOfPatternWhen<Key>(this.rootKey);
+    return new AsyncHeadOfPatternWhen<Key>(this.config, this.rootKey);
   }
 }
 class AsyncHeadOfPatternWhen<Key> {
-  constructor(private readonly rootKey: MaybeAsyncKeyLike<Key>) {}
+  constructor(
+    private readonly config: MatchConfig,
+    private readonly rootKey: MaybeAsyncKeyLike<Key>
+  ) {}
 
   when<Val>(
     key: MaybeAsyncKeyLike<Key>,
     value: MaybeAsyncValueLike<Val> | AsyncValueLike<Val>
   ) {
-    return new AsyncPatternWhen<Key, Val>(this.rootKey, [{ key, value }]);
+    return new AsyncPatternWhen<Key, Val>(this.config, this.rootKey, [
+      { key, value },
+    ]);
   }
 }
 
 class PatternWhen<Key, Val> {
   constructor(
+    private readonly config: MatchConfig,
     private readonly rootKey: KeyLike<Key>,
     private readonly states: Array<MatchState<Key, Val>>
   ) {}
 
   when(key: KeyLike<Key>, value: ValueLike<Val>): PatternWhen<Key, Val> {
-    return new PatternWhen<Key, Val>(this.rootKey, [
+    return new PatternWhen<Key, Val>(this.config, this.rootKey, [
       ...this.states,
       { key, value },
     ]);
   }
   otherwise(otherwise: ValueLike<Val>): Val {
-    const matched = this.states.find(
-      (s) => resolveMaybeCallable(s.key) === resolveMaybeCallable(this.rootKey)
+    const matched = this.states.find((s) =>
+      this.config.compare(
+        resolveMaybeCallable(s.key),
+        resolveMaybeCallable(this.rootKey)
+      )
     );
 
     return resolveMaybeCallable(matched ? matched.value : otherwise);
   }
 
   get async(): AsyncPatternWhen<Key, Val> {
-    return new AsyncPatternWhen<Key, Val>(this.rootKey, this.states);
+    return new AsyncPatternWhen<Key, Val>(
+      this.config,
+      this.rootKey,
+      this.states
+    );
   }
 }
 class AsyncPatternWhen<Key, Val> {
   constructor(
+    private readonly config: MatchConfig,
     private readonly rootKey: MaybeAsyncKeyLike<Key>,
     private readonly states: Array<
       MatchState<Key | Promise<Key>, Val | Promise<Val>>
@@ -85,7 +113,7 @@ class AsyncPatternWhen<Key, Val> {
     key: MaybeAsyncKeyLike<Key>,
     value: MaybeAsyncValueLike<Val>
   ): AsyncPatternWhen<Key, Val> {
-    return new AsyncPatternWhen<Key, Val>(this.rootKey, [
+    return new AsyncPatternWhen<Key, Val>(this.config, this.rootKey, [
       ...this.states,
       { key, value },
     ]);
@@ -100,7 +128,7 @@ class AsyncPatternWhen<Key, Val> {
       const rootKey = await resolveMaybeCallable(this.rootKey);
       const key = await resolveMaybeCallable(s.key);
 
-      if (rootKey === key) {
+      if (this.config.compare(rootKey, key)) {
         matched = s;
         break;
       }
