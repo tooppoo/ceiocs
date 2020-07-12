@@ -1,6 +1,6 @@
 {
   "name": "ceiocs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "This library allows developers to use conditional 'expressions' instead of conditional 'statements'",
   "main": "./dist/index.cjs.js",
   "types": "./dist/index.d.ts",
@@ -17,7 +17,9 @@
   ],
   "author": "philomagi <tooppoo56@gmail.com>",
   "license": "MIT",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "directories": {
     "lib": "./packages"
   },
