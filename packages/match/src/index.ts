@@ -1,3 +1,3 @@
 import { PatternMatch } from "./core/match";
 
-export const pattern = new PatternMatch();
+export const cases = new PatternMatch();
