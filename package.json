@@ -46,7 +46,7 @@
     "prettier": "2.0.5",
     "rollup": "2.23.1",
     "rollup-plugin-istanbul": "2.0.1",
-    "rollup-plugin-typescript2": "0.27.2",
+    "rollup-plugin-typescript2": "0.29.0",
     "rollup-plugin-uglify": "6.0.4",
     "ts-jest": "26.1.4",
     "typescript": "3.9.7"
