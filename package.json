@@ -44,7 +44,7 @@
     "husky": "4.2.5",
     "jest": "26.6.3",
     "prettier": "2.0.5",
-    "rollup": "2.23.1",
+    "rollup": "2.36.1",
     "rollup-plugin-istanbul": "2.0.1",
     "rollup-plugin-typescript2": "0.27.2",
     "rollup-plugin-uglify": "6.0.4",
