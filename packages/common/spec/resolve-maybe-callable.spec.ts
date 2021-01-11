@@ -1,6 +1,6 @@
 import { resolveMaybeCallable } from "../src/resolve-maybe-callable";
 
-describe(resolveMaybeCallable, () => {
+describe("resolveMaybeCallable", () => {
   describe.each([
     ["a"],
     [(): string => "a"],
