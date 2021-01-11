@@ -2,7 +2,7 @@ name: release to npm
 
 on:
   release:
-    types: [created]
+    types: [created, edited]
 
 jobs:
   build:
@@ -10,11 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-          with:
-            node-version: '15.x'
-            registry-url: 'https://registry.npmjs.org'
-            scope: '@octocat'
+        with:
+          node-version: '15.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@octocat'
       - run: yarn install
       - run: yarn publish
-          env:
-              NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        env:
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
