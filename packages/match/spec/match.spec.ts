@@ -6,8 +6,8 @@ describe("match", () => {
       [
         'match.case (a) case a => "case a" case b => "case b" otherwise => "default"',
         match
-          .case("a")
-          .when("a", "case a")
+          .case<string>("a")
+          .when<string>("a", "case a")
           .when("b", "case b")
           .otherwise("default"),
         "case a",
@@ -15,8 +15,8 @@ describe("match", () => {
       [
         'match.case (b) case a => "case a" case b => "case b" otherwise => "default"',
         match
-          .case("b")
-          .when("a", "case a")
+          .case<string>("b")
+          .when<string>("a", "case a")
           .when("b", "case b")
           .otherwise("default"),
         "case b",
@@ -24,8 +24,8 @@ describe("match", () => {
       [
         'match.case (x) case a => "case a" case b => "case b" otherwise => "default"',
         match
-          .case("x")
-          .when("a", "case a")
+          .case<string>("x")
+          .when<string>("a", "case a")
           .when("b", "case b")
           .otherwise("default"),
         "default",
@@ -34,7 +34,7 @@ describe("match", () => {
         'match.case (() => a) case a => "case a" case b => "case b" otherwise => "default"',
         match
           .case(() => "a")
-          .when("a", "case a")
+          .when<string>("a", "case a")
           .when("b", "case b")
           .otherwise("default"),
         "case a",
@@ -42,8 +42,8 @@ describe("match", () => {
       [
         'match.case (b) case a => "case a" case () => b => "case b" otherwise => "default"',
         match
-          .case("b")
-          .when("a", "case a")
+          .case<string>("b")
+          .when<string>("a", "case a")
           .when(() => "b", "case b")
           .otherwise("default"),
         "case b",
@@ -51,7 +51,7 @@ describe("match", () => {
       [
         'match.case (a) case a => () => "case a" case b => "case b" otherwise => "default"',
         match
-          .case("a")
+          .case<string>("a")
           .when("a", () => "case a")
           .when("b", "case b")
           .otherwise("default"),
@@ -60,8 +60,8 @@ describe("match", () => {
       [
         'match.case (a) case a => "case a" case b => () => "case b" otherwise => "default"',
         match
-          .case("b")
-          .when("a", "case a")
+          .case<string>("b")
+          .when<string>("a", "case a")
           .when("b", () => "case b")
           .otherwise("default"),
         "case b",
@@ -69,8 +69,8 @@ describe("match", () => {
       [
         'match.case (x) case a => "case a" case b => "case b" otherwise => () => "default"',
         match
-          .case("x")
-          .when("a", "case a")
+          .case<string>("x")
+          .when<string>("a", "case a")
           .when("b", "case b")
           .otherwise(() => "default"),
         "default",
@@ -107,7 +107,7 @@ describe("match", () => {
       [
         'match.case (a) case a => async "case a" case b => async "case b" otherwise => "default"',
         match
-          .case("b")
+          .case<string>("b")
           .async.when("a", Promise.resolve("case a"))
           .when("b", Promise.resolve("case b"))
           .otherwise("default"),
@@ -116,8 +116,8 @@ describe("match", () => {
       [
         'match.case (x) case a => "case a" case b => async () => "case b" otherwise => "default"',
         match
-          .case("x")
-          .when("a", "case a")
+          .case<string>("x")
+          .when<string>("a", "case a")
           .async.when("b", Promise.resolve("case b"))
           .otherwise("default"),
         "default",
@@ -125,8 +125,8 @@ describe("match", () => {
       [
         'match.case (x) case a => "case a" case b => "case b" otherwise => async "default"',
         match
-          .case("x")
-          .when("a", "case a")
+          .case<string>("x")
+          .when<string>("a", "case a")
           .when("b", "case b")
           .async.otherwise(Promise.resolve("default")),
         "default",
@@ -187,7 +187,7 @@ describe("match", () => {
           "first matched",
           matchLocal
             .case({ value: 1 })
-            .when({ value: 1 }, "matched")
+            .when<string>({ value: 1 }, "matched")
             .when({ value: 2 }, "not match")
             .otherwise("default"),
         ],
@@ -195,7 +195,7 @@ describe("match", () => {
           "second matched",
           matchLocal
             .case({ value: 1 })
-            .when({ value: 2 }, "not match")
+            .when<string>({ value: 2 }, "not match")
             .when({ value: 1 }, "matched")
             .otherwise("default"),
         ],
@@ -203,7 +203,7 @@ describe("match", () => {
           "otherwise matched",
           matchLocal
             .case({ value: 1 })
-            .when({ value: 2 }, "not match")
+            .when<string>({ value: 2 }, "not match")
             .when({ value: 2 }, "not match")
             .otherwise("matched"),
         ],
