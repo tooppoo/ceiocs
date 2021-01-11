@@ -6,13 +6,13 @@ describe("branch", () => {
       describe.each([
         [
           "if(true) { a } elseif(true) { b } else { c }",
-          branch.if(true, "a").elseif(true, "b").else("c"),
+          branch.if<string>(true, "a").elseif(true, "b").else("c"),
           "a",
         ],
         [
           "if(lazy true) { a } elseif(true) { b } else { c }",
           branch
-            .if(() => true, "a")
+            .if<string>(() => true, "a")
             .elseif(() => true, "b")
             .else("c"),
           "a",
@@ -46,13 +46,13 @@ describe("branch", () => {
       describe.each([
         [
           "if(false) { a } elseif(true) { b } else { c }",
-          branch.if(false, "a").elseif(true, "b").else("c"),
+          branch.if<string>(false, "a").elseif(true, "b").else("c"),
           "b",
         ],
         [
           "if(false) { a } elseif(lazy true) { b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .elseif(() => true, "b")
             .else("c"),
           "b",
@@ -60,7 +60,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(true) { lazy b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .elseif(true, () => "b")
             .else("c"),
           "b",
@@ -68,7 +68,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(lazy true) { lazy b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .elseif(
               () => true,
               () => "b"
@@ -86,13 +86,13 @@ describe("branch", () => {
       describe.each([
         [
           "if(false) { a } elseif(false) { b } else { c }",
-          branch.if(false, "a").elseif(false, "b").else("c"),
+          branch.if<string>(false, "a").elseif(false, "b").else("c"),
           "c",
         ],
         [
           "if(false) { a } elseif(false) { b } else { lazy c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .elseif(false, "b")
             .else(() => "c"),
           "c",
@@ -158,7 +158,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(async true) { b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .async.elseif(Promise.resolve(true), "b")
             .else("c"),
           "b",
@@ -166,7 +166,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(async lazy true) { b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .async.elseif(async () => true, "b")
             .else("c"),
           "b",
@@ -174,7 +174,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(true) { async b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .async.elseif(true, Promise.resolve("b"))
             .else("c"),
           "b",
@@ -182,7 +182,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(true) { async lazy b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .async.elseif(true, async () => "b")
             .else("c"),
           "b",
@@ -190,7 +190,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(async lazy true) { async lazy b } else { c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .async.elseif(
               async () => true,
               async () => "b"
@@ -209,7 +209,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(false) { b } else { async c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .async.elseif(false, "b")
             .else(Promise.resolve("c")),
           "c",
@@ -217,7 +217,7 @@ describe("branch", () => {
         [
           "if(false) { a } elseif(false) { b } else { async lazy c }",
           branch
-            .if(false, "a")
+            .if<string>(false, "a")
             .async.elseif(false, "b")
             .else(async () => "c"),
           "c",
@@ -288,7 +288,7 @@ describe("branch", () => {
         describe.each([
           [
             "if (true) then { a } elseif(true) then { b } else { c }",
-            branch.if(true).then("a").elseif(true).then("b").else("c"),
+            branch.if(true).then<string>("a").elseif(true).then("b").else("c"),
             "a",
           ],
           [
@@ -311,14 +311,14 @@ describe("branch", () => {
         describe.each([
           [
             "if(false) then { a } elseif(true) then { b } else { c }",
-            branch.if(false).then("a").elseif(true).then("b").else("c"),
+            branch.if(false).then<string>("a").elseif(true).then("b").else("c"),
             "b",
           ],
           [
             "if(false) then { a } elseif(true) then { lazy b } else { c }",
             branch
               .if(false)
-              .then("a")
+              .then<string>("a")
               .elseif(true)
               .then(() => "b")
               .else("c"),
@@ -366,7 +366,7 @@ describe("branch", () => {
             "if(false) then { a } elseif(true) then { async b } else { c }",
             branch
               .if(false)
-              .then("a")
+              .then<string>("a")
               .async.elseif(true)
               .then(Promise.resolve("b"))
               .else("c"),
@@ -376,7 +376,7 @@ describe("branch", () => {
             "if(false) then { a } elseif(true) then { lazy async b } else { c }",
             branch
               .if(false)
-              .then("a")
+              .then<string>("a")
               .async.elseif(true)
               .then(async () => "b")
               .else("c"),
