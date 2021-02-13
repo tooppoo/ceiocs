@@ -2,9 +2,10 @@ import fs from "fs";
 import path from "path";
 import typescript from "rollup-plugin-typescript2";
 import istanbul from "rollup-plugin-istanbul";
+import { terser } from "rollup-plugin-terser";
 
 const plugins = {
-  required: [typescript],
+  required: [typescript, terser],
   production: [],
   develop: [istanbul],
   select() {
