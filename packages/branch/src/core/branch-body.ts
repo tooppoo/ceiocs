@@ -8,10 +8,6 @@ import {
 } from "./branch-state";
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
 
-interface ElseIf<Val, NextBranch> {
-  then(value: Val): NextBranch;
-}
-
 export class AsyncBranchBody<Val> {
   constructor(
     protected readonly states: readonly BranchState<
@@ -20,27 +16,7 @@ export class AsyncBranchBody<Val> {
     >[]
   ) {}
 
-  elseif(
-    condition: AsyncableCondition
-  ): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>>;
-  elseif(
-    condition: AsyncableCondition,
-    value?: AsyncableValue<Val>
-  ): AsyncBranchBody<Val>;
-  elseif(
-    condition: AsyncableCondition,
-    value?: AsyncableValue<Val>
-  ): ElseIf<AsyncableValue<Val>, AsyncBranchBody<Val>> | AsyncBranchBody<Val> {
-    if (!value) {
-      return {
-        then: (lazyVal: AsyncableValue<Val>): AsyncBranchBody<Val> =>
-          new AsyncBranchBody<Val>([
-            ...this.states,
-            { condition, value: lazyVal },
-          ]),
-      };
-    }
-
+  elseif(condition: AsyncableCondition, value: AsyncableValue<Val>): AsyncBranchBody<Val> {
     return new AsyncBranchBody<Val>([...this.states, { condition, value }]);
   }
   async else(otherwise: AsyncableValue<Val>): Promise<Val> {
@@ -67,19 +43,7 @@ export class SyncBranchBody<Val> {
     >[]
   ) {}
 
-  elseif(condition: SyncCondition): ElseIf<SyncValue<Val>, SyncBranchBody<Val>>;
-  elseif(condition: SyncCondition, value?: SyncValue<Val>): SyncBranchBody<Val>;
-  elseif(
-    condition: SyncCondition,
-    value?: SyncValue<Val>
-  ): ElseIf<SyncValue<Val>, SyncBranchBody<Val>> | SyncBranchBody<Val> {
-    if (!value) {
-      return {
-        then: (lazyVal: SyncValue<Val>): SyncBranchBody<Val> =>
-          new SyncBranchBody([...this.states, { condition, value: lazyVal }]),
-      };
-    }
-
+  elseif(condition: SyncCondition, value: SyncValue<Val>): SyncBranchBody<Val> {
     return new SyncBranchBody([...this.states, { condition, value }]);
   }
 

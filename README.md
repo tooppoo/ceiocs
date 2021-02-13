@@ -89,32 +89,5 @@ match
   .otherwise(async () => "c") // => Promise.resolve("b")
 ```
 
-### Style
-you can use some coding style.
-
-```typescript
-// callback style
-branch
-  .if(() => false, 1)
-  .elseif(true, () => 2)
-  .else(() => 3); // => 3
-```
-```typescript
-// if-then style
-branch
-  .if(() => false).then(1)
-  .elseif(true).then(() => 2)
-  .else(() => 3); // => 3
-```
-```typescript
-// mix style
-branch
-  .if(() => false).then(1)
-  .elseif(true, () => 2)
-  .else(() => 3); // => 3
-```
-
-you can see "if-then style" as a curried "callback style"
-
 ## License
 MIT
