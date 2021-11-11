@@ -1,7 +1,7 @@
 # ceiocs
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![npm version](https://badge.fury.io/js/ceiocs.svg)](https://badge.fury.io/js/ceiocs)
-[![Build Status](https://travis-ci.org/tooppoo/ceiocs.svg?branch=master)](https://travis-ci.org/tooppoo/ceiocs)
+[![Node.js CI](https://github.com/tooppoo/ceiocs/actions/workflows/node.js.yml/badge.svg)](https://github.com/tooppoo/ceiocs/actions/workflows/node.js.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb4fb9bb0d149ac2d1c6/maintainability)](https://codeclimate.com/github/tooppoo/ceiocs/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cb4fb9bb0d149ac2d1c6/test_coverage)](https://codeclimate.com/github/tooppoo/ceiocs/test_coverage)
 
