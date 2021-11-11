@@ -34,7 +34,7 @@
     "prepublishOnly": "NODE_ENV=production npm run build"
   },
   "devDependencies": {
-    "@types/jest": "27.0.1",
+    "@types/jest": "27.0.2",
     "@typescript-eslint/eslint-plugin": "4.29.2",
     "@typescript-eslint/parser": "4.29.2",
     "eslint": "7.32.0",
@@ -42,7 +42,7 @@
     "eslint-plugin-jest": "24.4.0",
     "eslint-plugin-prettier": "3.4.0",
     "husky": "7.0.1",
-    "jest": "27.0.6",
+    "jest": "27.3.1",
     "prettier": "2.3.2",
     "rollup": "2.56.2",
     "rollup-plugin-istanbul": "3.0.0",
