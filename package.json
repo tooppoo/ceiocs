@@ -34,7 +34,7 @@
     "prepublishOnly": "NODE_ENV=production npm run build"
   },
   "devDependencies": {
-    "@types/jest": "27.5.1",
+    "@types/jest": "27.5.2",
     "@typescript-eslint/eslint-plugin": "5.27.0",
     "@typescript-eslint/parser": "5.27.0",
     "eslint": "8.16.0",
