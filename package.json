@@ -42,7 +42,7 @@
     "eslint-plugin-jest": "27.1.4",
     "eslint-plugin-prettier": "4.2.1",
     "husky": "8.0.1",
-    "jest": "29.2.2",
+    "jest": "29.3.0",
     "prettier": "2.7.1",
     "rollup": "2.79.1",
     "rollup-plugin-istanbul": "3.0.0",
