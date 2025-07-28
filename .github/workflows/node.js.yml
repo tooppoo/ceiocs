@@ -18,13 +18,13 @@ jobs:
       matrix:
         node-version: [14.x, 16.x]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@2f8e54208210a422b2efd51efaa6bd6d7ca8920f # v3
       id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -33,7 +33,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -51,7 +51,7 @@ jobs:
           node-version: '16'
       - run: yarn install
       - run: yarn build
-      - uses: paambaati/codeclimate-action@v3.2.0
+      - uses: paambaati/codeclimate-action@b649ad206d2e83dafb9ed130deba698aa1b41d78 # v3.2.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
