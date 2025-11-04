@@ -2,8 +2,6 @@
   "name": "ceiocs",
   "version": "0.0.9",
   "description": "This library allows developers to use conditional 'expressions' instead of conditional 'statements'",
-  "main": "./dist/index.cjs.js",
-  "types": "./dist/index.d.ts",
   "homepage": "https://github.com/tooppoo/ceiocs",
   "repository": "https://github.com/tooppoo/ceiocs",
   "exports": {
