@@ -2,25 +2,28 @@ import { type Comparator, MatchConfig } from "./config";
 import type { AsyncableKeyLike, KeyLike } from "./type";
 import { AsyncHeadOfWhen, HeadOfWhen } from "./when";
 
-export class Matcher {
-  constructor(private readonly config: MatchConfig = MatchConfig.default) {}
+export class Matcher<TComparable = unknown> {
+  constructor(
+    private readonly config: MatchConfig<TComparable> = MatchConfig.defaultFor<TComparable>()
+  ) {}
 
-  case<Key>(rootKey: KeyLike<Key>): HeadOfWhen<Key> {
-    return new HeadOfWhen(this.config, rootKey);
+  case<Key extends TComparable = TComparable>(rootKey: KeyLike<Key>): HeadOfWhen<TComparable, Key> {
+    return new HeadOfWhen<TComparable, Key>(this.config, rootKey);
   }
 
-  get async(): AsyncMatcher {
-    return new AsyncMatcher(this.config);
+  get async(): AsyncMatcher<TComparable> {
+    return new AsyncMatcher<TComparable>(this.config);
   }
 
-  compareBy<T>(matcher: Comparator<T>): Matcher {
-    return new Matcher(this.config.changeMatcher(matcher));
+  compareBy<Next>(matcher: Comparator<Next>): Matcher<Next> {
+    return new Matcher<Next>(this.config.changeMatcher(matcher));
   }
 }
-class AsyncMatcher {
-  constructor(private readonly config: MatchConfig) {}
 
-  match<Key>(rootKey: AsyncableKeyLike<Key>): AsyncHeadOfWhen<Key> {
-    return new AsyncHeadOfWhen(this.config, rootKey);
+class AsyncMatcher<TComparable> {
+  constructor(private readonly config: MatchConfig<TComparable>) {}
+
+  match<Key extends TComparable = TComparable>(rootKey: AsyncableKeyLike<Key>): AsyncHeadOfWhen<TComparable, Key> {
+    return new AsyncHeadOfWhen<TComparable, Key>(this.config, rootKey);
   }
 }

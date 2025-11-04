@@ -193,12 +193,14 @@ branch.if(true, Promise.resolve("a")).else("c");
 ### Match の比較ロジック
 
 ```typescript
-class MatchConfig {
-  compare<T>(a: T, b: T): boolean {
+class MatchConfig<T = unknown> {
+  constructor(readonly compare: Comparator<T>) {}
+
+  static defaultFor<T>(): MatchConfig<T> {
     // デフォルト: === による比較
   }
 
-  changeMatcher<T>(matcher: Comparator<T>): MatchConfig {
+  changeMatcher<Next>(matcher: Comparator<Next>): MatchConfig<Next> {
     // 新しい MatchConfig を返す
   }
 }

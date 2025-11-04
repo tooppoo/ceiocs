@@ -52,7 +52,7 @@ export class SyncBranchBody<Val> {
       resolveMaybeCallable(condition)
     );
 
-    return resolveMaybeCallable(satisfied ? satisfied.value : value);
+    return resolveMaybeCallable<Val>(satisfied ? satisfied.value : value);
   }
 
   get async(): AsyncBranchBody<Val> {
