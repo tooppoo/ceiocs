@@ -6,9 +6,13 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  release:
+  build:
     name: Release
     environment: Release
+    permissions:
+      contents: read
+      id-token: write # for OIDC
+
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -21,10 +25,37 @@ jobs:
     - name: Build Project
       run: bun run build
 
+    - uses: actions/upload-artifact@v4
+      with:
+        name: artifact
+        path: .
+
     - name: Create Release Pull Request or Publish to npm
       id: changesets
       uses: changesets/action@v1
       with:
         publish: bun publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Release
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: artifact
+      # bun publish がOIDCに対応していない(at 2025/11/04)ので、
+      # publishのみnpm経由
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '22.21.1'
+
+    - name: Publish Release
+      uses: changesets/action@v1
+      with:
+        publish: npm publish --provenance
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
