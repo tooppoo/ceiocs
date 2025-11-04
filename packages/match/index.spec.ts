@@ -216,4 +216,44 @@ describe("match", () => {
       });
     });
   });
+
+  describe("toString", () => {
+    it("sync: ビルダー経由で case/when の文字列を返す", () => {
+      const body = match
+        .case<number>(1)
+        .when(1, "one")
+        .when(2, "two");
+
+      const expected = [
+        "case (1) {",
+        "  when 1: one;",
+        "  when 2: two;",
+        "}",
+        "",
+      ].join("\n");
+
+      expect((body as unknown as { toString(): string }).toString()).toBe(
+        expected
+      );
+    });
+
+    it("async: ビルダー経由で case/when の文字列を返す", () => {
+      const body = match.async
+        .match<number>(1)
+        .when(1, "x")
+        .when(2, "y");
+
+      const expected = [
+        "case (1) {",
+        "  when 1: x;",
+        "  when 2: y;",
+        "}",
+        "",
+      ].join("\n");
+
+      expect((body as unknown as { toString(): string }).toString()).toBe(
+        expected
+      );
+    });
+  });
 });

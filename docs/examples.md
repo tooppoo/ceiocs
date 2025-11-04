@@ -563,6 +563,62 @@ const body = branch.if(true, "a").elseif(false, "b");
 logger.debug("条件式", { expr: body.toString() });
 ```
 
+## デバッグ: Match の toString()
+
+`match` で構築されたオブジェクトは、`toString()` を呼ぶと `case/when` 形式の文字列を返します。ブレークポイント無しでも現在の分岐設定を素早く可視化できます。
+
+注意: 現行実装では、キーや値が文字列であってもクォート無しで出力されます（例: `when 1: one;`）。関数や Promise を渡した場合も、その型に応じた素の表現が埋め込まれます。
+
+### 同期マッチ
+
+```typescript
+import { match } from "ceiocs";
+
+const body = match
+  .case<number>(1)
+  .when(1, "one")
+  .when(2, "two");
+
+console.log(body.toString());
+// 出力（改行・空行含む）：
+// case (1) {
+//   when 1: one;
+//   when 2: two;
+// }
+//
+```
+
+### 非同期マッチ
+
+```typescript
+import { match } from "ceiocs";
+
+const body = match.async
+  .match<number>(1)
+  .when(1, "x")
+  .when(2, "y");
+
+console.log(body.toString());
+// 出力（改行・空行含む）：
+// case (1) {
+//   when 1: x;
+//   when 2: y;
+// }
+//
+```
+
+活用例（構造化ログ）:
+
+```typescript
+const logger = {
+  debug: (message: string, context: Record<string, unknown> = {}) =>
+    console.log(JSON.stringify({ level: "debug", timestamp: new Date().toISOString(), message, ...context })),
+};
+
+const body = match.case("a").when("a", "A").when("b", "B");
+logger.debug("マッチ条件式", { expr: (body as any).toString() });
+```
+
 ## まとめ
 
 | 機能 | 特徴 |
