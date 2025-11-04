@@ -1,0 +1,23 @@
+changelog:
+  exclude:
+    authors:
+      - dependabot
+      - dependabot[bot]
+      - renovate
+      - renovate[bot]
+  categories:
+    - title: Breaking Changes 💥
+      labels:
+        - BREAKING_CHANGE
+    - title: Application Improved 🙂
+      labels:
+        - enhancement
+    - title: Bug Fix 🤕
+      labels:
+        - bug
+    - title: Documentation 📝
+      labels:
+        - documentation
+    - title: Build & Deployment 🚀
+      labels:
+        - build
