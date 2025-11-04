@@ -43,6 +43,7 @@ jobs:
       with:
         node-version: '22.21.1'
     - run: npm install -g npm@11.6.2 # for OIDC
+    - run: npm ci
 
     - uses: actions/download-artifact@v4
       with:
