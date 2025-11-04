@@ -1,5 +1,5 @@
-import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
-import type { MaybeAsync, MaybeCallable, MustSync } from "@common/value-type";
+import { resolveMaybeCallable } from "../../common/resolve-maybe-callable";
+import type { MaybeAsync, MaybeCallable, MustSync } from "../../common/value-type";
 import type { MatchConfig } from "./config";
 import type { AsyncableKeyLike, KeyLike } from "./type";
 

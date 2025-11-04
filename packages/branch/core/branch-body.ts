@@ -1,4 +1,4 @@
-import type { MaybeCallable } from "@common/value-type";
+import type { MaybeCallable } from "../../common/value-type";
 import type {
   SyncValue,
   SyncCondition,
@@ -6,7 +6,7 @@ import type {
   AsyncableValue,
   AsyncableCondition,
 } from "./branch-state";
-import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
+import { resolveMaybeCallable } from "../../common/resolve-maybe-callable";
 
 export class AsyncBranchBody<Val> {
   constructor(

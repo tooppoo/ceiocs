@@ -1,2 +1,2 @@
-export { branch } from "./branch/src/index";
-export { match } from "./match/src/index";
+export { branch } from "./branch/index";
+export { match } from "./match/index";

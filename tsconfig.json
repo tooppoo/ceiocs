@@ -3,17 +3,11 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "rootDir": "./packages",
     "strict": true,
-    "baseUrl": "./packages",
-    "paths": {
-      "@branch/*": ["branch/src/*"],
-      "@match/*": ["match/src/*"],
-      "@common/*": ["common/src/*"]
-    },
     "declaration": true,
     "esModuleInterop": true,
-    "newLine": "lf"
+    "newLine": "lf",
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules",

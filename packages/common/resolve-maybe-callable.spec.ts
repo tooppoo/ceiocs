@@ -1,4 +1,4 @@
-import { resolveMaybeCallable } from "../src/resolve-maybe-callable";
+import { resolveMaybeCallable } from "./resolve-maybe-callable";
 
 describe("resolveMaybeCallable", () => {
   describe.each([
