@@ -1,21 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "module": "esnext",
-    "rootDir": "./packages",
+    "moduleResolution": "bundler",
     "strict": true,
-    "baseUrl": "./packages",
-    "paths": {
-      "@branch/*": ["branch/src/*"],
-      "@match/*": ["match/src/*"],
-      "@common/*": ["common/src/*"]
-    },
     "declaration": true,
     "esModuleInterop": true,
-    "newLine": "lf"
+    "newLine": "lf",
+    "outDir": "dist",
+    "skipLibCheck": true
   },
+  "include": [
+    "./build.ts",
+    "./packages/**/*.ts"
+  ],
   "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
+    "node_modules"
   ]
 }

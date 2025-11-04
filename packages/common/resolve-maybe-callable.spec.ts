@@ -1,4 +1,6 @@
-import { resolveMaybeCallable } from "../src/resolve-maybe-callable";
+import { resolveMaybeCallable } from "./resolve-maybe-callable";
+
+import { describe, expect, it } from "bun:test";
 
 describe("resolveMaybeCallable", () => {
   describe.each([
@@ -11,7 +13,7 @@ describe("resolveMaybeCallable", () => {
     ],
   ])("%p", (funcOrVal) => {
     it("should resolved", () => {
-      expect(resolveMaybeCallable(funcOrVal)).toStrictEqual("a");
+      expect(resolveMaybeCallable<string>(funcOrVal)).toEqual("a");
     });
   });
 });

@@ -1,5 +1,5 @@
-import { Comparator, MatchConfig } from "./config";
-import { AsyncableKeyLike, KeyLike } from "./type";
+import { type Comparator, MatchConfig } from "./config";
+import type { AsyncableKeyLike, KeyLike } from "./type";
 import { AsyncHeadOfWhen, HeadOfWhen } from "./when";
 
 export class Matcher {

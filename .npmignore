@@ -1,5 +1,4 @@
 
-.vscode
-coverage
-
-./dist/**/*.spec.ts
+dist/
+node_modules/
+packages/**/*.spec.ts
