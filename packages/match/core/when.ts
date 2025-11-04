@@ -72,6 +72,10 @@ class When<Comparable, Key extends Comparable, Val> {
   get async(): AsyncWhen<Comparable, Key, Val> {
     return new AsyncWhen<Comparable, Key, Val>(this.config, this.rootKey, this.states);
   }
+  
+  toString(): string {
+    return stringifyMatch(this.rootKey, this.states as any);
+  }
 }
 
 class AsyncWhen<Comparable, Key extends Comparable, Val> {
@@ -111,4 +115,21 @@ class AsyncWhen<Comparable, Key extends Comparable, Val> {
 
     return resolveMaybeCallable(matched ? matched.value : otherwise);
   }
+  
+  toString(): string {
+    return stringifyMatch(this.rootKey, this.states as any);
+  }
 }
+
+function stringifyMatch(
+  rootKey: unknown,
+  states: ReadonlyArray<MatchState<unknown, unknown>>
+): string {
+  const top = `case (${rootKey})\x20{\n`;
+  const lines = states
+    .map(({ key, value }) => `  when ${key}: ${value};\n`)
+    .join("");
+  const end = `}\n`;
+  return `${top}${lines}${end}`;
+}
+ 

@@ -291,4 +291,46 @@ describe("branch", () => {
       });
     });
   });
+  
+  describe("toString", () => {
+    it("sync: ビルダー経由で if/else if の文字列を返す", () => {
+      const body = branch
+        .if(true, "a")
+        .elseif(false, "b")
+        .elseif(true, "c");
+
+      const expected = [
+        "if (true) {",
+        "  return a;",
+        "}",
+        "else if (false) {",
+        "  return b;",
+        "}",
+        "else if (true) {",
+        "  return c;",
+        "}",
+        "",
+      ].join("\n");
+
+      expect(body.toString()).toBe(expected);
+    });
+
+    it("async: ビルダー経由で if/else if の文字列を返す", () => {
+      const body = branch.async
+        .if(true, "x")
+        .elseif(false, "y");
+
+      const expected = [
+        "if (true) {",
+        "  return x;",
+        "}",
+        "else if (false) {",
+        "  return y;",
+        "}",
+        "",
+      ].join("\n");
+
+      expect(body.toString()).toBe(expected);
+    });
+  });
 });
