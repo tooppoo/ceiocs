@@ -245,30 +245,30 @@ describe("branch", () => {
     describe.each([
       [
         (): unknown => p1.cond.mockReturnValue(true),
-        (): any =>
+        (): unknown =>
           branch.if(p1.cond, p1.act).elseif(p2.cond, p2.act).else(other),
-        (): any[] => [p1.cond],
-        (): any[] => [p2.cond, p2.act, other],
+        (): unknown[] => [p1.cond],
+        (): unknown[] => [p2.cond, p2.act, other],
       ],
       [
         (): void => {
           p1.cond.mockReturnValue(false);
           p2.cond.mockReturnValue(true);
         },
-        (): any =>
+        (): unknown =>
           branch.if(p1.cond, p1.act).elseif(p2.cond, p2.act).else(other),
-        (): any[] => [p1.cond, p2.cond, p2.act],
-        (): any[] => [p1.act, other],
+        (): unknown[] => [p1.cond, p2.cond, p2.act],
+        (): unknown[] => [p1.act, other],
       ],
       [
         (): void => {
           p1.cond.mockReturnValue(false);
           p2.cond.mockReturnValue(false);
         },
-        (): any =>
+        (): unknown =>
           branch.if(p1.cond, p1.act).elseif(p2.cond, p2.act).else(other),
-        (): any[] => [p1.cond, p2.cond, other],
-        (): any[] => [p1.act, p2.act],
+        (): unknown[] => [p1.cond, p2.cond, other],
+        (): unknown[] => [p1.act, p2.act],
       ],
     ])("when condition is satisfied", (arrange, act, called, notCalled) => {
       it("only call function corresponding to the condigion", () => {
@@ -276,8 +276,8 @@ describe("branch", () => {
 
         act();
 
-        called().forEach((f) => expect(f).toBeCalled());
-        notCalled().forEach((f) => expect(f).not.toBeCalled());
+        called().forEach((f) => { expect(f).toBeCalled() });
+        notCalled().forEach((f) => { expect(f).not.toBeCalled() });
       });
     });
   });

@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import typescript from "rollup-plugin-typescript2";
 import istanbul from "rollup-plugin-istanbul";
 import { terser } from "rollup-plugin-terser";
