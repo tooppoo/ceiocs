@@ -8,10 +8,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   build:
     name: Build
-    permissions:
-      contents: read
-      id-token: write # for OIDC
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -35,6 +31,9 @@ jobs:
     name: Publish Release
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # for OIDC
     environment: Release
     steps:
     # bun publish がOIDCに対応していない(at 2025/11/04)ので、
