@@ -1,5 +1,5 @@
-import { MaybeCallable } from "@common/value-type";
-import {
+import type { MaybeCallable } from "@common/value-type";
+import type {
   SyncValue,
   SyncCondition,
   BranchState,

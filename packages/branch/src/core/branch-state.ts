@@ -1,4 +1,4 @@
-import { MaybeAsync, MaybeCallable, MustSync } from "@common/value-type";
+import type { MaybeAsync, MaybeCallable, MustSync } from "@common/value-type";
 
 export type SyncCondition = MaybeCallable<boolean>;
 export type AsyncableCondition = MaybeCallable<MaybeAsync<boolean>>;

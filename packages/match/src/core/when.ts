@@ -1,7 +1,7 @@
 import { resolveMaybeCallable } from "@common/resolve-maybe-callable";
-import { MaybeAsync, MaybeCallable, MustSync } from "@common/value-type";
-import { MatchConfig } from "./config";
-import { AsyncableKeyLike, KeyLike } from "./type";
+import type { MaybeAsync, MaybeCallable, MustSync } from "@common/value-type";
+import type { MatchConfig } from "./config";
+import type { AsyncableKeyLike, KeyLike } from "./type";
 
 type ValueLike<T> = MustSync<T, MaybeCallable<T>>;
 type AsyncableValueLike<T> = MaybeCallable<MaybeAsync<T>>;
