@@ -5,8 +5,8 @@
     "ghcr.io/devcontainers/features/git:latest": {},
     "ghcr.io/devcontainers/features/github-cli:latest": {}
   },
-  "postCreateCommand": "bun install",
   "remoteUser": "bun",
+  "postCreateCommand": "bun install",
   "customizations": {
     "vscode": {
       "extensions": [
