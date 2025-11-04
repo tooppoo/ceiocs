@@ -1,6 +1,6 @@
 {
   "name": "ceiocs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "This library allows developers to use conditional 'expressions' instead of conditional 'statements'",
   "homepage": "https://github.com/tooppoo/ceiocs",
   "repository": "https://github.com/tooppoo/ceiocs",

@@ -1,5 +1,11 @@
 # ceiocs
 
+## 0.1.1
+
+### Patch Changes
+
+- [#656](https://github.com/tooppoo/ceiocs/pull/656) [`57c2e4e`](https://github.com/tooppoo/ceiocs/commit/57c2e4e0f4297a8a9d262acbc3071dcb8e1d6728) Thanks [@tooppoo](https://github.com/tooppoo)! - enhance type definitions without changing behavior
+
 ## 0.1.0
 
 ### Minor Changes
