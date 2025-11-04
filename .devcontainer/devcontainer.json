@@ -11,7 +11,8 @@
     "vscode": {
       "extensions": [
         "oven.bun-vscode",
-        "tamasfe.even-better-toml"
+        "tamasfe.even-better-toml",
+        "openai.chatgpt"
       ]
     }
   }
