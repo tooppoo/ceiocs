@@ -2,6 +2,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![npm version](https://badge.fury.io/js/ceiocs.svg)](https://badge.fury.io/js/ceiocs)
 [![Test](https://github.com/tooppoo/ceiocs/actions/workflows/test.yml/badge.svg)](https://github.com/tooppoo/ceiocs/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/tooppoo/ceiocs/graph/badge.svg?token=ZS76PM2ICG)](https://codecov.io/gh/tooppoo/ceiocs)
 
 ## About
 `ceiocs` is library that allows developers to use conditional 'expressions' instead of conditional 'statements'.
