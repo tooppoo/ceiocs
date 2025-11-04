@@ -43,7 +43,9 @@ jobs:
       with:
         node-version: '22.21.1'
     - run: npm install -g npm@11.6.2 # for OIDC
-    - run: npm ci
+    # パッケージ管理はbunで行っているので、ciではなくinstall
+    # changesetがほしいだけなので、厳密さは求めない
+    - run: npm install
 
     - uses: actions/download-artifact@v4
       with:
