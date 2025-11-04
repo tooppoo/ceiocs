@@ -497,6 +497,72 @@ console.log(getOrderMessage(regularOrder)); // => "割引は適用されませ�
 
 ---
 
+## デバッグ: Branch の toString()
+
+`branch` のメソッドチェーン（`if`/`elseif`）で構築されたオブジェクトは、`toString()` を呼ぶと対応する if/else if 形式の文字列を返します。デバッグやログ出力に便利です。
+
+注意: 現行実装では、値が文字列であってもクォート無しで出力されます（例: `return a;`）。条件や値に関数や Promise を渡した場合も、その型に応じた素の表現が埋め込まれます。
+
+### 同期ブランチ
+
+```typescript
+import { branch } from "ceiocs";
+
+const body = branch
+  .if(true, "a")
+  .elseif(false, "b")
+  .elseif(true, "c");
+
+console.log(body.toString());
+// 出力（改行・空行含む）:
+// if (true) {
+//   return a;
+// }
+// else if (false) {
+//   return b;
+// }
+// else if (true) {
+//   return c;
+// }
+//
+```
+
+### 非同期ブランチ
+
+```typescript
+import { branch } from "ceiocs";
+
+const body = branch.async
+  .if(true, "x")
+  .elseif(false, "y");
+
+console.log(body.toString());
+// 出力（改行・空行含む）:
+// if (true) {
+//   return x;
+// }
+// else if (false) {
+//   return y;
+// }
+//
+```
+
+### 空のチェーン
+
+states が空の場合は空文字列になります（内部仕様）。
+
+活用例（構造化ログ）:
+
+```typescript
+const logger = {
+  debug: (message: string, context: Record<string, unknown> = {}) =>
+    console.log(JSON.stringify({ level: "debug", timestamp: new Date().toISOString(), message, ...context })),
+};
+
+const body = branch.if(true, "a").elseif(false, "b");
+logger.debug("条件式", { expr: body.toString() });
+```
+
 ## まとめ
 
 | 機能 | 特徴 |
