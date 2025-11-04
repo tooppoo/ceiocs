@@ -1,5 +1,11 @@
 # ceiocs
 
+## 0.2.0
+
+### Minor Changes
+
+- [#662](https://github.com/tooppoo/ceiocs/pull/662) [`8b88925`](https://github.com/tooppoo/ceiocs/commit/8b88925f16f2143b2d04225d49dc52c611671228) Thanks [@tooppoo](https://github.com/tooppoo)! - implements toString method for debug
+
 ## 0.1.1
 
 ### Patch Changes
