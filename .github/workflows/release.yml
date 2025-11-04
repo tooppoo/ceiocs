@@ -42,6 +42,7 @@ jobs:
     - uses: actions/setup-node@v6
       with:
         node-version: '22.21.1'
+    - run: npm install -g npm@11.6.2 # for OIDC
 
     - uses: actions/download-artifact@v4
       with:
@@ -52,5 +53,3 @@ jobs:
       uses: changesets/action@v1
       with:
         publish: npm publish --provenance ./artifact.tgz
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
