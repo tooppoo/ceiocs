@@ -1,3 +1,9 @@
 
+[install]
+minimumReleaseAge = 1440
+
+globalDir = ".bun/install/global"
+globalBinDir = ".bun/.bun/bin"
+
 [test]
 coverageReporter = ["text", "lcov"]
