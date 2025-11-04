@@ -1,7 +1,7 @@
+name: Release Workflow
+
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -28,34 +28,40 @@ jobs:
         path: artifact.tgz
 
   publish:
-    name: Publish Release
+    name: Publish Package
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
       id-token: write # for OIDC
     environment: Release
     steps:
     # bun publish がOIDCに対応していない(at 2025/11/04)ので、
     # publishのみnpm経由
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
       with:
         node-version: '24.11.0'
     - run: npm install -g npm@11.6.2 # for OIDC
-    # パッケージ管理はbunで行っているので、ciではなくinstall
-    # changesetがほしいだけなので、厳密さは求めない
-    - run: npm install
 
     - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
       with:
         name: artifact
         path: .
+    - name: Publish
+      run: npm publish --provenance ./artifact.tgz
 
-    - name: Publish Release
-      uses: changesets/action@v1
+    - name: Get version from package.json
+      id: version
+      run: |
+        VERSION=$(jq -r '.version' package.json)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+    - name: Create tag
+      run: |
+        git tag "v${{ steps.version.outputs.version }}"
+        git push origin "v${{ steps.version.outputs.version }}"
+    - name: Create Release
+      uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2
       with:
-        publish: npm publish --provenance ./artifact.tgz
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        tag_name: "v${{ steps.version.outputs.version }}"
+        generate_release_notes: true
