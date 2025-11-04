@@ -1,10 +1,12 @@
-export class MatchConfig<T = any> {
-  static readonly default: MatchConfig = new MatchConfig((a, b) => a === b);
+export class MatchConfig<T = unknown> {
+  static readonly default: MatchConfig<unknown> = new MatchConfig<unknown>(
+    (a, b) => a === b
+  );
 
   constructor(readonly compare: Comparator<T>) {}
 
-  changeMatcher(matcher: Comparator<T>): MatchConfig {
-    return new MatchConfig(matcher);
+  changeMatcher(matcher: Comparator<T>): MatchConfig<T> {
+    return new MatchConfig<T>(matcher);
   }
 }
 

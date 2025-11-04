@@ -22,10 +22,14 @@
 ```typescript
 export type MaybeAsync<T> = T | Promise<T>;
 export type MaybeCallable<T> = (() => T) | T;
-export type MustSync<T, R = T> = T extends Promise<any> ? never : R;
+export type MustSync<T, R = T> = T extends
+  | Promise<unknown>
+  | PromiseLike<unknown>
+  ? never
+  : R;
 ```
 
-`MustSync<T, R>`は`T`が`Promise`型である場合に`never`を返し、型エラーとなります。
+`MustSync<T, R>`は`T`が`Promise`または`PromiseLike`型である場合に`never`を返し、型エラーとなります。
 
 ### 2. 遅延評価（Lazy Evaluation）
 

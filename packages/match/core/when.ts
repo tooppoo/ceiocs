@@ -62,9 +62,7 @@ class When<Key, Val> {
       )
     );
 
-    return resolveMaybeCallable(
-      (matched ? matched.value : otherwise) as MaybeCallable<Val>
-    );
+    return resolveMaybeCallable(matched ? matched.value : otherwise);
   }
 
   get async(): AsyncWhen<Key, Val> {
