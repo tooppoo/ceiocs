@@ -22,7 +22,7 @@ jobs:
     - name: Pack Artifact
       run: bun pm pack --filename artifact.tgz
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
       with:
         name: artifact
         path: artifact.tgz
@@ -42,13 +42,13 @@ jobs:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
     - uses: actions/setup-node@v6
       with:
-        node-version: '22.21.1'
+        node-version: '24.11.0'
     - run: npm install -g npm@11.6.2 # for OIDC
     # パッケージ管理はbunで行っているので、ciではなくinstall
     # changesetがほしいだけなので、厳密さは求めない
     - run: npm install
 
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
       with:
         name: artifact
         path: .
