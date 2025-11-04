@@ -37,7 +37,8 @@
   "scripts": {
     "build": "bun --bun ./build.ts",
     "lint": "bunx --bun biome lint --write",
-    "changeset": "changeset"
+    "changeset": "bunx --bun changeset",
+    "check-types": "bunx --bun tsc --noEmit"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.3",
