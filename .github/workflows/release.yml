@@ -52,6 +52,6 @@ jobs:
     - name: Publish Release
       uses: changesets/action@v1
       with:
-        publish: npm publish --provenance ./artifact/artifact.tgz
+        publish: npm publish --provenance ./artifact.tgz
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
