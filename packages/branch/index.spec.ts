@@ -1,5 +1,7 @@
 import { branch } from "./index";
 
+import { beforeEach, describe, expect, it, mock } from "bun:test";
+
 describe("branch", () => {
   describe("sync", () => {
     describe("if", () => {
@@ -231,29 +233,37 @@ describe("branch", () => {
   });
 
   describe("lazy call", () => {
-    type Pair = { cond: jest.Mock; act: jest.Mock };
+    type Pair = { cond: () => boolean; act: () => boolean };
     let p1: Pair;
     let p2: Pair;
-    let other: jest.Mock;
+    let other: () => boolean;
 
     beforeEach(() => {
-      p1 = { cond: jest.fn(), act: jest.fn() };
-      p2 = { cond: jest.fn(), act: jest.fn() };
-      other = jest.fn();
-    });
+      p1 = {
+        cond: mock(() => false),
+        act: mock(() => true),
+      };
+      p2 = {
+        cond: mock(() => false),
+        act: mock(() => true),
+      };
+      other = mock(() => false);
+    })
 
     describe.each([
       [
-        (): unknown => p1.cond.mockReturnValue(true),
-        (): unknown =>
+        () => {
+          p1.cond = mock(() => true)
+        },
+        () =>
           branch.if(p1.cond, p1.act).elseif(p2.cond, p2.act).else(other),
         (): unknown[] => [p1.cond],
         (): unknown[] => [p2.cond, p2.act, other],
       ],
       [
         (): void => {
-          p1.cond.mockReturnValue(false);
-          p2.cond.mockReturnValue(true);
+          p1.cond = mock(() => false);
+          p2.cond = mock(() => true);
         },
         (): unknown =>
           branch.if(p1.cond, p1.act).elseif(p2.cond, p2.act).else(other),
@@ -262,8 +272,8 @@ describe("branch", () => {
       ],
       [
         (): void => {
-          p1.cond.mockReturnValue(false);
-          p2.cond.mockReturnValue(false);
+          p1.cond = mock(() => false);
+          p2.cond = mock(() => false);
         },
         (): unknown =>
           branch.if(p1.cond, p1.act).elseif(p2.cond, p2.act).else(other),

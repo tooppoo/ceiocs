@@ -1,5 +1,7 @@
 import { match } from "./index";
 
+import { describe, expect, it } from "bun:test";
+
 describe("match", () => {
   describe("sync", () => {
     describe.each([
