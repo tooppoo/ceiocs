@@ -33,6 +33,10 @@ export class AsyncBranchBody<Val> {
 
     return resolveMaybeCallable(satisfied);
   }
+
+  toString(): string {
+    return stringify(this.states);
+  }
 }
 
 export class SyncBranchBody<Val> {
@@ -58,4 +62,15 @@ export class SyncBranchBody<Val> {
   get async(): AsyncBranchBody<Val> {
     return new AsyncBranchBody<Val>(this.states);
   }
+
+  toString(): string {
+    return stringify(this.states);
+  }
+}
+
+function stringify(states: readonly BranchState<AsyncableCondition, AsyncableValue<any>>[]): string {
+  const [head, ...rest] = states;
+  const top = head ? `if (${head.condition}) {\n  return ${head.value};\n}\n` : "";
+
+  return `${top}${rest.map(({ condition, value }) => `else if (${condition}) {\n  return ${value};\n}\n`).join("")}`;
 }
