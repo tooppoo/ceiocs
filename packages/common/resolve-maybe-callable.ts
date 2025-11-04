@@ -1,7 +1,12 @@
-import type { MaybeCallable } from "./value-type";
+import type { MaybeCallable, MustSync } from "./value-type";
 
-const isCallable = <T>(val: any): val is () => T =>
-  val instanceof Function || (val.bind && val.call && val.apply);
+const isCallable = <T>(value: unknown): value is () => T =>
+  typeof value === "function";
 
-export const resolveMaybeCallable = <T>(v: MaybeCallable<T>): T =>
-  isCallable(v) ? v() : v;
+export function resolveMaybeCallable<T>(value: MaybeCallable<T>): T;
+export function resolveMaybeCallable<T>(
+  value: MustSync<T, MaybeCallable<T>>
+): T;
+export function resolveMaybeCallable<T>(value: MaybeCallable<T>): T {
+  return isCallable(value) ? value() : value;
+}

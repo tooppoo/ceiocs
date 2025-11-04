@@ -11,44 +11,48 @@ interface MatchState<Key, Val> {
   value: Val;
 }
 
-export class HeadOfWhen<Key> {
+export class HeadOfWhen<Comparable, Key extends Comparable = Comparable> {
   constructor(
-    private readonly config: MatchConfig,
+    private readonly config: MatchConfig<Comparable>,
     private readonly rootKey: KeyLike<Key>
   ) {}
 
-  when<Val>(key: KeyLike<Key>, value: ValueLike<Val>): When<Key, Val> {
-    return new When<Key, Val>(this.config, this.rootKey, [{ key, value }]);
+  when<Val>(key: KeyLike<Key>, value: ValueLike<Val>): When<Comparable, Key, Val> {
+    return new When<Comparable, Key, Val>(this.config, this.rootKey, [
+      { key, value },
+    ]);
   }
 
-  get async(): AsyncHeadOfWhen<Key> {
-    return new AsyncHeadOfWhen<Key>(this.config, this.rootKey);
+  get async(): AsyncHeadOfWhen<Comparable, Key> {
+    return new AsyncHeadOfWhen<Comparable, Key>(this.config, this.rootKey);
   }
 }
 
-export class AsyncHeadOfWhen<Key> {
+export class AsyncHeadOfWhen<Comparable, Key extends Comparable = Comparable> {
   constructor(
-    private readonly config: MatchConfig,
+    private readonly config: MatchConfig<Comparable>,
     private readonly rootKey: AsyncableKeyLike<Key>
   ) {}
 
   when<Val>(
     key: AsyncableKeyLike<Key>,
     value: AsyncableValueLike<Val>
-  ): AsyncWhen<Key, Val> {
-    return new AsyncWhen<Key, Val>(this.config, this.rootKey, [{ key, value }]);
+  ): AsyncWhen<Comparable, Key, Val> {
+    return new AsyncWhen<Comparable, Key, Val>(this.config, this.rootKey, [
+      { key, value },
+    ]);
   }
 }
 
-class When<Key, Val> {
+class When<Comparable, Key extends Comparable, Val> {
   constructor(
-    private readonly config: MatchConfig,
+    private readonly config: MatchConfig<Comparable>,
     private readonly rootKey: KeyLike<Key>,
     private readonly states: Array<MatchState<KeyLike<Key>, ValueLike<Val>>>
   ) {}
 
-  when(key: KeyLike<Key>, value: ValueLike<Val>): When<Key, Val> {
-    return new When<Key, Val>(this.config, this.rootKey, [
+  when(key: KeyLike<Key>, value: ValueLike<Val>): When<Comparable, Key, Val> {
+    return new When<Comparable, Key, Val>(this.config, this.rootKey, [
       ...this.states,
       { key, value },
     ]);
@@ -57,24 +61,22 @@ class When<Key, Val> {
   otherwise(otherwise: ValueLike<Val>): Val {
     const matched = this.states.find((s) =>
       this.config.compare(
-        resolveMaybeCallable(s.key),
-        resolveMaybeCallable(this.rootKey)
+        resolveMaybeCallable<Key>(s.key),
+        resolveMaybeCallable<Key>(this.rootKey)
       )
     );
 
-    return resolveMaybeCallable(
-      (matched ? matched.value : otherwise) as MaybeCallable<Val>
-    );
+    return resolveMaybeCallable<Val>(matched ? matched.value : otherwise);
   }
 
-  get async(): AsyncWhen<Key, Val> {
-    return new AsyncWhen<Key, Val>(this.config, this.rootKey, this.states);
+  get async(): AsyncWhen<Comparable, Key, Val> {
+    return new AsyncWhen<Comparable, Key, Val>(this.config, this.rootKey, this.states);
   }
 }
 
-class AsyncWhen<Key, Val> {
+class AsyncWhen<Comparable, Key extends Comparable, Val> {
   constructor(
-    private readonly config: MatchConfig,
+    private readonly config: MatchConfig<Comparable>,
     private readonly rootKey: AsyncableKeyLike<Key>,
     private readonly states: Array<
       MatchState<AsyncableKeyLike<Key>, AsyncableValueLike<Val>>
@@ -84,8 +86,8 @@ class AsyncWhen<Key, Val> {
   when(
     key: AsyncableKeyLike<Key>,
     value: AsyncableValueLike<Val>
-  ): AsyncWhen<AsyncableKeyLike<Key>, AsyncableValueLike<Val>> {
-    return new AsyncWhen<Key, Val>(this.config, this.rootKey, [
+  ): AsyncWhen<Comparable, Key, Val> {
+    return new AsyncWhen<Comparable, Key, Val>(this.config, this.rootKey, [
       ...this.states,
       { key, value },
     ]);
