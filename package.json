@@ -13,7 +13,7 @@
       "types": "./packages/index.ts"
     }
   },
-  "file": [
+  "files": [
     "dist",
     "packages",
     "LICENSE",
@@ -30,9 +30,6 @@
   ],
   "author": "philomagi <tooppoo56@gmail.com>",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
   "private": false,
   "scripts": {
     "build": "bun --bun ./build.ts",
