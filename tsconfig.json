@@ -7,10 +7,14 @@
     "declaration": true,
     "esModuleInterop": true,
     "newLine": "lf",
-    "outDir": "dist"
+    "outDir": "dist",
+    "skipLibCheck": true
   },
+  "include": [
+    "./build.ts",
+    "./packages/**/*.ts"
+  ],
   "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
+    "node_modules"
   ]
 }
