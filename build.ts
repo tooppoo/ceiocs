@@ -4,6 +4,7 @@ await Bun.build({
   outdir: "./dist/esm",
   target: "node",
   format: "esm",
+  sourcemap: true,
   minify: false,
 })
 await Bun.build({
@@ -11,6 +12,7 @@ await Bun.build({
   outdir: "./dist/cjs",
   target: "node",
   format: "cjs",
+  sourcemap: true,
   minify: false,
 })
 
