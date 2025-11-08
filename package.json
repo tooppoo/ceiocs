@@ -1,6 +1,6 @@
 {
   "name": "ceiocs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "This library allows developers to use conditional 'expressions' instead of conditional 'statements'",
   "homepage": "https://github.com/tooppoo/ceiocs",
   "repository": "https://github.com/tooppoo/ceiocs",
@@ -30,7 +30,7 @@
   "author": "philomagi <tooppoo56@gmail.com>",
   "license": "MIT",
   "type": "module",
-  "private": false, 
+  "private": false,
   "scripts": {
     "build": "bun --bun ./build.ts && bun run types",
     "types": "bunx --bun tsc -p ./tsconfig.build.json",

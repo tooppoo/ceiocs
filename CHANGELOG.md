@@ -1,5 +1,11 @@
 # ceiocs
 
+## 0.2.1
+
+### Patch Changes
+
+- [#664](https://github.com/tooppoo/ceiocs/pull/664) [`5934079`](https://github.com/tooppoo/ceiocs/commit/593407949c41880f6a72ed0d369c5af24c9c4483) Thanks [@tooppoo](https://github.com/tooppoo)! - fix exports style
+
 ## 0.2.0
 
 ### Minor Changes
