@@ -6,10 +6,11 @@
   ],
   "exclude": [
     "build.ts",
+    "./packages/**/*.spec.ts",
     "node_modules"
   ],
   "compilerOptions": {
-    "outFile": "dist/types/index.d.ts",
+    "outDir": "dist/types",
     "emitDeclarationOnly": true
   }
 }
