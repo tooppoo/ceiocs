@@ -4,16 +4,17 @@
   "description": "This library allows developers to use conditional 'expressions' instead of conditional 'statements'",
   "homepage": "https://github.com/tooppoo/ceiocs",
   "repository": "https://github.com/tooppoo/ceiocs",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js",
-      "types": "./packages/index.ts"
+      "types": "./dist/types/index.d.ts"
     }
   },
   "files": [
     "dist",
-    "packages",
     "LICENSE",
     "README.md"
   ],
@@ -28,9 +29,11 @@
   ],
   "author": "philomagi <tooppoo56@gmail.com>",
   "license": "MIT",
-  "private": false,
+  "type": "module",
+  "private": false, 
   "scripts": {
-    "build": "bun --bun ./build.ts",
+    "build": "bun --bun ./build.ts && bun run types",
+    "types": "bunx --bun tsc -p ./tsconfig.build.json",
     "lint": "bunx --bun biome lint --write",
     "changeset": "bunx --bun changeset",
     "check-types": "bunx --bun tsc --noEmit"
