@@ -10,7 +10,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+    - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
     - uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2
       with:
         bun-version-file: ".bun-version"
@@ -38,10 +38,10 @@ jobs:
     steps:
     # bun publish がOIDCに対応していない(at 2025/11/04)ので、
     # publishのみnpm経由
-    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-    - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+    - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+    - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
       with:
-        node-version: '24.11.0'
+        node-version: '24.11.1'
     - run: npm install -g npm@11.6.2 # for OIDC
 
     - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
@@ -61,7 +61,7 @@ jobs:
         git tag "v${{ steps.version.outputs.version }}"
         git push origin "v${{ steps.version.outputs.version }}"
     - name: Create Release
-      uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2
+      uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
       with:
         tag_name: "v${{ steps.version.outputs.version }}"
         generate_release_notes: true
