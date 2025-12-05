@@ -1,5 +1,11 @@
 # ceiocs
 
+## 1.0.0
+
+### Major Changes
+
+- [#678](https://github.com/tooppoo/ceiocs/pull/678) [`21c52c3`](https://github.com/tooppoo/ceiocs/commit/21c52c36ddf7014de8c76162ba3bec66393fa0bf) Thanks [@tooppoo](https://github.com/tooppoo)! - first major release
+
 ## 0.2.1
 
 ### Patch Changes
